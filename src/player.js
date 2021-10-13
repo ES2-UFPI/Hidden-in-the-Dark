@@ -29,7 +29,7 @@ export default class Player {
         const anims = create.anims;
         anims.create({
             key: "leftWalk",
-            frames: anims.generateFrameNames(this.name, { start: 16, end: 19 }),
+            frames: anims.generateFrameNames(this.name, { start: 19, end: 16 }),
             frameRate: 10,
             repeat: -1,
         });
@@ -111,7 +111,9 @@ export default class Player {
             else if (this.prevVelocity.y > 0) 
                 if (this.prevDir == 'l') this.player.anims.play("leftIdle", true);
                 else this.player.anims.play("rightIdle", true);
-
+            
+            if (this.prevDir == 'l') this.player.anims.play("leftIdle", true);
+            else this.player.anims.play("rightIdle", true);
         }
     }
 
