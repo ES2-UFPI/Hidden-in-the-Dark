@@ -8,10 +8,8 @@ export default class Player {
         this.velocidade = velocidade;
         this.player = undefined;
 
-
         this.prevVelocity = undefined;
         this.prevDir = 'l';
-
         
     }
 
@@ -58,7 +56,7 @@ export default class Player {
         this.player.anims.play("rightIdle", true);
     }
 
-    update(update, button){
+    update(button){
 
         this.prevVelocity = this.player.body.velocity.clone();
         this.prevDir = this.player.anims.currentAnim.key.toString()[0];

@@ -4,8 +4,7 @@ import mapJSON from "./assets/map/map.json";
 import water from "./assets/map/water.png";
 import Hidder from "./hidder.js";
 import Seeker from "./seeker.js";
-
-import playerImage from "./assets/players/player_2.png";
+import Chest from "./chest.js";
 
 class Partida extends Phaser.Scene
 {
@@ -14,6 +13,7 @@ class Partida extends Phaser.Scene
         super();
 
         this.player = new Hidder(2, 200);
+        this.chest = new Chest(1);
     }
 
     preload (){
@@ -29,7 +29,7 @@ class Partida extends Phaser.Scene
 
 
         this.player.preload(this);
-
+        this.chest.preload(this);
     }
       
     create (){
@@ -59,16 +59,18 @@ class Partida extends Phaser.Scene
 
         //criacao das animacoes do player
 
-        
-
         this.player.create(this, 300, 200);
         this.physics.add.collider(this.player.player, objectCollider);
 
 
+        this.chest.create(this,{'x': 400, 'y':200});
+        this.physics.add.collider(this.player.player, this.chest.chest );
 
+        
 
+      
         //fazer a camera seguir o personagem
-        const camera = this.cameras.main.setZoom(4);
+        const camera = this.cameras.main.setZoom(2);
         camera.startFollow(this.player.player);
         //define limites de alcançe da câmera
         camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -79,7 +81,7 @@ class Partida extends Phaser.Scene
 
         button = this.input.keyboard.createCursorKeys();
         
-        this.player.update(this, button);
+        this.player.update(button);
         
 
     }
