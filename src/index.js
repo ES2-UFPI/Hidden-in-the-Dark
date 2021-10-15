@@ -6,8 +6,13 @@ import Hidder from "./hidder.js";
 import Seeker from "./seeker.js";
 import Chest from "./chest.js";
 
+var keys;
+
+
+
 class Partida extends Phaser.Scene
 {
+
     constructor ()
     {
         super();
@@ -62,9 +67,11 @@ class Partida extends Phaser.Scene
         this.player.create(this, 300, 200);
         this.physics.add.collider(this.player.player, objectCollider);
 
-
+        //interação player e chest
         this.chest.create(this,{'x': 400, 'y':200});
-        this.physics.add.collider(this.player.player, this.chest.chest );
+        this.chest.create(this,{'x': 400, 'y':300});
+        this.physics.add.overlap(this.player.player, this.chest.chest, this.hitChest, null, this);
+
 
         
 
@@ -76,13 +83,23 @@ class Partida extends Phaser.Scene
         camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     }
 
+    hitChest(player, chest) {
+        if(this.chest.open === false){
+            chest.anims.play('open', true);
+            keys+=1;
+            this.chest.open = true;
+        }
+    }
+
     update(){ 
 
 
         button = this.input.keyboard.createCursorKeys();
-        
         this.player.update(button);
         
+        /*if(keys==5){
+
+        }*/
 
     }
 

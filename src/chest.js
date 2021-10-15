@@ -6,6 +6,7 @@ export default class Chest {
         this.id = id;
         this.caminho = '/src/assets/items/chest.png';
         this.name = 'chest-'+this.id;
+        this.open = false;
     }
 
     preload(preload) {
@@ -30,8 +31,7 @@ export default class Chest {
         anims.create({
             key: "open",
             frames: anims.generateFrameNames(this.name, { start: 77, end: 81 }),
-            frameRate: 10,
-            repeat: -1,
+            frameRate: 10
         });
 
 
