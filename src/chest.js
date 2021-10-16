@@ -55,7 +55,6 @@ export default class Chest {
             if(this.open === false){
                 this.chest.anims.play('open', true);
                 this.open = true;
-                //falta dar os pontos
             }
         });
         console.log(this.zone);

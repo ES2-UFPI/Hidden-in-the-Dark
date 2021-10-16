@@ -7,6 +7,8 @@ import Seeker from "./seeker.js";
 import Chest from "./chest.js";
 
 var keys;
+const n = 4;
+var keysText;
 
 
 
@@ -18,8 +20,10 @@ class Partida extends Phaser.Scene
         super();
 
         this.player = new Hidder(this, 2, 200);
-        this.chest = new Chest(this, 1);
-        this.chest2 = new Chest(this, 2);
+        this.chests = [];
+        for(var i = 0; i < n; i++){
+            this.chests.push(new Chest(this, i))
+        }
     }
 
     preload (){
@@ -35,8 +39,9 @@ class Partida extends Phaser.Scene
 
 
         this.player.preload();
-        this.chest.preload();
-        this.chest2.preload();
+        for(var i = 0; i < n; i++){
+            this.chests[i].preload();
+        }
     }
       
     create (){
@@ -59,7 +64,8 @@ class Partida extends Phaser.Scene
         const aboveCollider = map.createLayer("aboveObject", tileset, 0, 0);
 
         objectCollider.setCollisionByProperty({ collider: true });
-        aboveCollider.setDepth(10);
+        
+        aboveCollider.setDepth(20);
 
         //player
         
@@ -69,8 +75,11 @@ class Partida extends Phaser.Scene
         this.physics.add.collider(this.player.player, objectCollider);
 
         //interação player e chest
-        this.chest.create({'x': 400, 'y':200}, this.player);
-        this.chest2.create({'x': 400, 'y':300}, this.player);
+        for(var i = 0; i < n; i++){
+            var y = 200+100*i;
+            this.chests[i].create({'x': 400, 'y': y}, this.player, keys, keysText);
+        }
+        
 
 
         
@@ -81,6 +90,7 @@ class Partida extends Phaser.Scene
         camera.startFollow(this.player.player);
         //define limites de alcançe da câmera
         camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
     }
 
 
@@ -89,7 +99,9 @@ class Partida extends Phaser.Scene
 
         button = this.input.keyboard.createCursorKeys();
         this.player.update(button);
-        
+
+        this.scene.launch('hud');
+
         /*if(keys==5){
 
         }*/
@@ -97,13 +109,23 @@ class Partida extends Phaser.Scene
     }
 
 }
+class HUD extends Phaser.Scene{
+    create(){
+        keysText = this.add.text(16, 16, 'keys: 0', { fontSize: '32px', fill: '#FFFFFF' });
+    }
+    update(){
 
+    }
+}
 const config = {
     type: Phaser.AUTO,
     parent: 'phaser-example',
     width: 800,
     height: 600,
-    scene: Partida,
+    scene: [
+        new Partida({ key: 'partida'}), // implied { active: true }
+        new HUD({ key: 'hud' })
+    ],
     physics: {
         default: "arcade",
         arcade: {
