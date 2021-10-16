@@ -2,25 +2,37 @@
 
 export default class Chest {
     
-    constructor(id){
+    constructor(game, id){
+        this.game = game;
         this.id = id;
         this.caminho = '/src/assets/items/chest.png';
         this.name = 'chest-'+this.id;
         this.open = false;
+        this.raio_acao = 100;
     }
 
-    preload(preload) {
-        preload.load.spritesheet(this.name, this.caminho, {
+    preload() {
+        this.game.load.spritesheet(this.name, this.caminho, {
             frameWidth: 54,
             frameHeight: 54,
         });
     }
 
-    create (create, coord){
+    create (coord, player){
 
-        this.chest = create.physics.add.staticSprite(coord['x'], coord['y'], this.name);
-        
-        const anims = create.anims;
+        this.chest = this.game.physics.add.staticSprite(coord['x'], coord['y'], this.name);
+
+        //this.zone = this.game.add.zone(coord['x'], coord['y'], 100, 100);
+        //this.zone.setOrigin(0.5, 0.5);
+        // make it a circle
+        //this.zone.setCircleDropZone(this.raio_acao);
+/*
+        this.zone = this.game.add.graphics({ fillStyle: { color: 0xFFFFFF } });
+        var circle = new Phaser.Geom.Circle( coord['x'], coord['y'], this.raio_acao);
+        this.zone.fillCircleShape(circle);
+        this.game.physics.add.existing(this.zone);
+*/
+        const anims = this.game.anims;
 
         anims.create({
             key: "close",
@@ -34,15 +46,20 @@ export default class Chest {
             frameRate: 10
         });
 
-
         this.chest.anims.play("close", true);
+
+        
+        //this.game.physics.add.collider(player.player, this.chest);
+        this.game.physics.add.overlap(player.player, this.chest , ()=>{
+            console.log('overlap');
+            if(this.open === false){
+                this.chest.anims.play('open', true);
+                this.open = true;
+            }
+        });
+        console.log(this.zone);
+
     }
 
-    open (){
-
-
-
-        //dar chave
-    }
 
 }
