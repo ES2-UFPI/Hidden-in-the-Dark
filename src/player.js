@@ -1,7 +1,8 @@
 
 export default class Player {
 
-    constructor(id, velocidade){
+    constructor(game, id, velocidade){
+        this.game = game;
         this.id = id;
         this.name = 'player_'+id;
         this.caminho = '/src/assets/players/player_'+id+'.png';
@@ -13,20 +14,20 @@ export default class Player {
         
     }
 
-
-    preload(preload) {
-        preload.load.spritesheet(this.name, this.caminho, {
+    preload() {
+        this.game.load.spritesheet(this.name, this.caminho, {
             frameWidth: 16,
             frameHeight: 24,
         });
     }
 
-    create (create, x, y){
+    create (x, y){
 
-        this.player = create.physics.add.sprite(x, y, this.name);
+        this.player = this.game.physics.add.sprite(x, y, this.name);
+        this.player.setCollideWorldBounds(true);
         
 
-        const anims = create.anims;
+        const anims = this.game.anims;
         anims.create({
             key: "leftWalk",
             frames: anims.generateFrameNames(this.name, { start: 19, end: 16 }),

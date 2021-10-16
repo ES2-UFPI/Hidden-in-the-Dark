@@ -17,8 +17,9 @@ class Partida extends Phaser.Scene
     {
         super();
 
-        this.player = new Hidder(2, 200);
-        this.chest = new Chest(1);
+        this.player = new Hidder(this, 2, 200);
+        this.chest = new Chest(this, 1);
+        this.chest2 = new Chest(this, 2);
     }
 
     preload (){
@@ -33,8 +34,9 @@ class Partida extends Phaser.Scene
         //carregando a skin do jogador
 
 
-        this.player.preload(this);
-        this.chest.preload(this);
+        this.player.preload();
+        this.chest.preload();
+        this.chest2.preload();
     }
       
     create (){
@@ -63,14 +65,12 @@ class Partida extends Phaser.Scene
         
 
         //criacao das animacoes do player
-
-        this.player.create(this, 300, 200);
+        this.player.create(300, 200);
         this.physics.add.collider(this.player.player, objectCollider);
 
         //interação player e chest
-        this.chest.create(this,{'x': 400, 'y':200});
-        this.chest.create(this,{'x': 400, 'y':300});
-        this.physics.add.overlap(this.player.player, this.chest.chest, this.hitChest, null, this);
+        this.chest.create({'x': 400, 'y':200}, this.player);
+        this.chest2.create({'x': 400, 'y':300}, this.player);
 
 
         
@@ -83,13 +83,6 @@ class Partida extends Phaser.Scene
         camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     }
 
-    hitChest(player, chest) {
-        if(this.chest.open === false){
-            chest.anims.play('open', true);
-            keys+=1;
-            this.chest.open = true;
-        }
-    }
 
     update(){ 
 
