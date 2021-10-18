@@ -59,9 +59,6 @@ export default class Partida extends Phaser.Scene
         objectCollider.setCollisionByProperty({ collider: true });
         
         aboveCollider.setDepth(20);
-        //this.add.text(10, 10, 'Health: 100', { font: '32px Courier', fill: '#000000' });
-
-        this.score = this.add.text(10, 10, 'keys: ' + this.keys, { font: '32px Courier', fill: '#000000' });
     
 
         //criacao das animacoes do player
