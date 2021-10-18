@@ -25,6 +25,7 @@ export default class Player {
 
         this.player = this.game.physics.add.sprite(x, y, this.name);
         this.player.setCollideWorldBounds(true);
+        this.player.depth = 10;
         
 
         const anims = this.game.anims;
@@ -116,6 +117,13 @@ export default class Player {
             if (this.prevDir == 'l') this.player.anims.play("leftIdle", true);
             else this.player.anims.play("rightIdle", true);
         }
+    }
+
+    interactions (chests){
+        chests.forEach((c) => {
+            this.game.physics.add.collider(this.player, c.chest);
+        });
+            
     }
 
 }

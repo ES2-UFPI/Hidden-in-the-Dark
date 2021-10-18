@@ -2,36 +2,33 @@
 
 export default class Chest {
     
-    constructor(game, id){
+    constructor(game, id, coord){
         this.game = game;
         this.id = id;
+        this.coord = coord;
         this.caminho = '/src/assets/items/chest.png';
         this.name = 'chest-'+this.id;
-        this.open = false;
-        this.raio_acao = 100;
+        this.is_open = false;
     }
 
     preload() {
+        this.game.load.image(this.name+'-zone', '/src/assets/items/chest-zone.png');
+
         this.game.load.spritesheet(this.name, this.caminho, {
             frameWidth: 54,
             frameHeight: 54,
         });
     }
 
-    create (coord, player){
+    create (){
 
-        this.chest = this.game.physics.add.staticSprite(coord['x'], coord['y'], this.name);
+        this.chest = this.game.physics.add.staticSprite(this.coord['x'], this.coord['y'], this.name);
+        this.zone = this.game.physics.add.staticImage(this.coord['x'], this.coord['y'], this.name+'-zone');
 
-        //this.zone = this.game.add.zone(coord['x'], coord['y'], 100, 100);
-        //this.zone.setOrigin(0.5, 0.5);
-        // make it a circle
-        //this.zone.setCircleDropZone(this.raio_acao);
-/*
-        this.zone = this.game.add.graphics({ fillStyle: { color: 0xFFFFFF } });
-        var circle = new Phaser.Geom.Circle( coord['x'], coord['y'], this.raio_acao);
-        this.zone.fillCircleShape(circle);
-        this.game.physics.add.existing(this.zone);
-*/
+        //this.zone.setScale(1.5).update();
+
+        this.zone.setVisible(false);
+
         const anims = this.game.anims;
 
         anims.create({
@@ -48,17 +45,15 @@ export default class Chest {
 
         this.chest.anims.play("close", true);
 
-        
-        //this.game.physics.add.collider(player.player, this.chest);
-        this.game.physics.add.overlap(player.player, this.chest , ()=>{
-            console.log('overlap');
-            if(this.open === false){
-                this.chest.anims.play('open', true);
-                this.open = true;
-            }
-        });
-        console.log(this.zone);
+    }
 
+    open(){
+        if(this.is_open == false){
+            this.chest.anims.play('open', true);
+            this.is_open = true;
+            this.game.addKey();
+            console.log(this.game.keys);
+        }
     }
 
 
