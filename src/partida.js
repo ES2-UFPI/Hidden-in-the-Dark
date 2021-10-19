@@ -1,9 +1,9 @@
-import mapPNG from "./assets/mapTeste/assetsmap.png";
-import mapJSON from "./assets/mapTeste/map.json";
-import water from "./assets/mapTeste/water.png";
+import mapPNG from "./assets/map/assetsmap.png";
+import mapJSON from "./assets/map/map.json";
 import Hidder from "./hidder.js";
 import Seeker from "./seeker.js";
 import Chest from "./chest.js";
+//import ChestSpanw from "./assets/locations/chest-spawn.json";
 
 export default class Partida extends Phaser.Scene
 {
@@ -13,26 +13,26 @@ export default class Partida extends Phaser.Scene
         this.keys = 0;
         var n = 4;//quant de baús
 
+        var locations = require("./assets/locations/chest-spawn.json")
+        shuffle(locations)
+
         this.player = new Hidder(this, 2, 200);
         this.chests = [];
         for(var i = 0; i < n; i++){
-            var y = 200+100*i;
-            this.chests.push(new Chest(this, i, {'x': 400, 'y': y}));
+            this.chests.push(new Chest(this, i, locations[i]));
         }
+
     }
 
     preload (){
         //pre carregando os assets
         //fundo png de agua
-        this.load.image("background", water);
         //templates de pixels para fazer o mapa
         this.load.image("tiles", mapPNG);
         //mapa do jogo feito a partir do template de pixels
         this.load.tilemapTiledJSON("map", mapJSON);
 
         //carregando a skin do jogador
-
-
         this.player.preload();
         this.chests.forEach((c)=>{c.preload()});
     }
@@ -43,26 +43,23 @@ export default class Partida extends Phaser.Scene
         //criando uma key para trabalhar com o map setado no preload
         const map = this.make.tilemap({ key: "map" });
         //tileset que indica as colisões do mapa
-        const tileset = map.addTilesetImage("assets", "tiles");
+        const tileset = map.addTilesetImage("assetsmap", "tiles");
 
         //colocando no fundo um png de agua
-        this.add.image(800, 600, "background");
+        //this.add.image(4928, 6368, "background");
 
         //inserindo as camadas do mapa
         //adcionando o chao e suas colisoes
         const ground = map.createLayer("ground", tileset, 0, 0);
         //coisas que colidem com o personagem
         const objectCollider = map.createLayer("objectCollider", tileset, 0, 0);
-        //coisas que o personagem passa por baixo
-        const aboveCollider = map.createLayer("aboveObject", tileset, 0, 0);
+   
 
         objectCollider.setCollisionByProperty({ collider: true });
-        
-        aboveCollider.setDepth(20);
     
 
         //criacao das animacoes do player
-        this.player.create(300, 200);
+        this.player.create(1834, 527);
         this.physics.add.collider(this.player.player, objectCollider);
 
         //interação player e chest
@@ -96,5 +93,21 @@ export default class Partida extends Phaser.Scene
     addKey(){
         this.keys += 1;
     }
-
+    
+}
+function shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
+    // While there remain elements to shuffle...
+    while (currentIndex != 0) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
 }

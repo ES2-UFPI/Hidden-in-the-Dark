@@ -24,7 +24,7 @@ export default class Player {
     create (x, y){
 
         this.player = this.game.physics.add.sprite(x, y, this.name);
-        this.player.setCollideWorldBounds(true);
+        //this.player.setCollideWorldBounds(true);
         this.player.depth = 10;
         
 

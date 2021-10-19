@@ -52,7 +52,6 @@ export default class Chest {
             this.chest.anims.play('open', true);
             this.is_open = true;
             this.game.addKey();
-            console.log(this.game.keys);
         }
     }
 
