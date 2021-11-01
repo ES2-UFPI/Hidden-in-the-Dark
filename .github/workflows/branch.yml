@@ -1,4 +1,4 @@
-name: DEV - Build & deploy
+name: Branch GitHub Actions
 on:
  push:
    branches:
@@ -19,7 +19,7 @@ jobs:
    - name: Install Packages
      run: yarn install   
    - name: Install Phaser
-     run: yarn install phaser3  
+     run: yarn add phaser3  
    - name: Build project
      run: yarn build
    - name: Upload production-ready build files
