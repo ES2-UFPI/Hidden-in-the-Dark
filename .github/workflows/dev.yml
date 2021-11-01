@@ -18,13 +18,11 @@ jobs:
        node-version: ${{ matrix.node-version }}
    - name: Install Packages
      run: yarn install   
-   - name: Build project
-     run: yarn build
    - name: Upload production-ready build files
      uses: actions/upload-artifact@v2
      with:
        name: production-files
-       path: ./build/*
+       path: ./
   deploy:
    name: Deploy
    needs: build
@@ -35,10 +33,10 @@ jobs:
      uses: actions/download-artifact@v2
      with:
        name: production-files
-       path: ./build/*
+       path: ./
 
    - name: Deploy to gh-pages
      uses: peaceiris/actions-gh-pages@v3
      with:
        github_token: ${{ secrets.GITHUB_TOKEN }}
-       publish_dir: ./build/*
+       publish_dir: ./
