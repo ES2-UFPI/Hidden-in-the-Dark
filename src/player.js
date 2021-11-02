@@ -120,9 +120,9 @@ export default class Player {
     }
 
     interactions (chests){
-        chests.forEach((c) => {
-            this.game.physics.add.collider(this.player, c.chest);
-        });
+        // chests.forEach((c) => {
+        //     this.game.physics.add.collider(this.player, c.chest);
+        // });
             
     }
 
