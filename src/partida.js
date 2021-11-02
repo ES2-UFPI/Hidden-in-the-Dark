@@ -10,15 +10,15 @@ export default class Partida extends Phaser.Scene
         super();
         this.keys = 0;
         var n = 4;//quant de baús
-        
-        var locations = require("./assets/locations/chest-spawn.json");
-        shuffle(locations);
+
+        // var locations = require("./assets/locations/chest-spawn.json")
+        // shuffle(locations)
 
         this.player = new Hidder(this, 2, 200);
-        this.chests = [];
-        for(var i = 0; i < n; i++){
-            this.chests.push(new Chest(this, i, locations[i]));
-        }
+        // this.chests = [];
+        // for(var i = 0; i < n; i++){
+        //     this.chests.push(new Chest(this, i, locations[i]));
+        // }
 
     }
 
@@ -32,7 +32,7 @@ export default class Partida extends Phaser.Scene
 
         //carregando a skin do jogador
         this.player.preload();
-        this.chests.forEach((c)=>{c.preload()});
+        // this.chests.forEach((c)=>{c.preload()});
     }
       
     create (){
@@ -61,10 +61,10 @@ export default class Partida extends Phaser.Scene
         this.physics.add.collider(this.player.player, objectCollider);
 
         //interação player e chest
-        this.chests.forEach((c)=>{c.create()});
+        // this.chests.forEach((c)=>{c.create()});
         
         //adiciona colisões
-        this.player.interactions(this.chests)
+        // this.player.interactions(this.chests)
         
         //fazer a camera seguir o personagem
         const camera = this.cameras.main.setZoom(2);
