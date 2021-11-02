@@ -1,4 +1,4 @@
-import Player from "./player";
+import Player from "./player.js";
 
 export default class Seeker extends Player {
 

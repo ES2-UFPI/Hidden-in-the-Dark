@@ -1,5 +1,3 @@
-import mapPNG from "./assets/map/assetsmap.png";
-import mapJSON from "./assets/map/map.json";
 import Hidder from "./hidder.js";
 import Seeker from "./seeker.js";
 import Chest from "./chest.js";
@@ -13,14 +11,14 @@ export default class Partida extends Phaser.Scene
         this.keys = 0;
         var n = 4;//quant de baús
 
-        var locations = require("./assets/locations/chest-spawn.json")
-        shuffle(locations)
+        // var locations = require("./assets/locations/chest-spawn.json")
+        // shuffle(locations)
 
         this.player = new Hidder(this, 2, 200);
-        this.chests = [];
-        for(var i = 0; i < n; i++){
-            this.chests.push(new Chest(this, i, locations[i]));
-        }
+        // this.chests = [];
+        // for(var i = 0; i < n; i++){
+        //     this.chests.push(new Chest(this, i, locations[i]));
+        // }
 
     }
 
@@ -28,13 +26,13 @@ export default class Partida extends Phaser.Scene
         //pre carregando os assets
         //fundo png de agua
         //templates de pixels para fazer o mapa
-        this.load.image("tiles", mapPNG);
+        this.load.image("tiles", "./src/assets/map/assetsmap.png");
         //mapa do jogo feito a partir do template de pixels
-        this.load.tilemapTiledJSON("map", mapJSON);
+        this.load.tilemapTiledJSON("map", "./src/assets/map/map.json");
 
         //carregando a skin do jogador
         this.player.preload();
-        this.chests.forEach((c)=>{c.preload()});
+        // this.chests.forEach((c)=>{c.preload()});
     }
       
     create (){
@@ -63,10 +61,10 @@ export default class Partida extends Phaser.Scene
         this.physics.add.collider(this.player.player, objectCollider);
 
         //interação player e chest
-        this.chests.forEach((c)=>{c.create()});
+        // this.chests.forEach((c)=>{c.create()});
         
         //adiciona colisões
-        this.player.interactions(this.chests)
+        // this.player.interactions(this.chests)
         
         //fazer a camera seguir o personagem
         const camera = this.cameras.main.setZoom(2);
