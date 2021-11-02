@@ -1,4 +1,4 @@
-import Phaser from "./phaser.min.js";
+//import Phaser from "./phaser.min.js";
 
 import HUD from "./hud.js";
 import Partida from "./partida.js";
