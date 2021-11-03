@@ -1,5 +1,5 @@
 
-import CircularProgress from 'phaser3-rex-plugins/plugins/circularprogress.js';
+//import CircularProgress from './phaser3-rex-plugins/plugins/circularprogress.js';
 
 const COLOR_PRIMARY = 0x4e342e;
 const COLOR_LIGHT = 0x7b5e57;
