@@ -62,7 +62,8 @@ export default class Hidder extends Player {
                 this.game.tweens.add({
                     targets: this.circularProgress,
                     value: 1,
-                    duration: 10000
+                    duration: 10000,
+                    ease:"Cubic"
                 })
 
                 this.circularProgress.setScrollFactor(0, 0);
