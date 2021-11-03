@@ -60,9 +60,8 @@ export default class Player {
         if(this.velocidade == 250){
             fog.depth = 10;
         }else{
-            fog.depth = 40;
+            fog.depth = 20;
         }
-        
 
         //fazer o campo de visao do personagem
         this.vision = this.game.make.image({
@@ -89,7 +88,7 @@ export default class Player {
             this.vision.x = this.player.x;
             this.vision.y = this.player.y;
 	    }
-        
+
         //qual botao esta sendo pressionado e realiza seu movimento respectivo (setas)
         if(button.left.isDown && button.down.isDown){
             this.player.body.setVelocityX(-velocidade_diagonal);

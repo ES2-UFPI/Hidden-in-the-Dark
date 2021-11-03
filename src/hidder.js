@@ -62,7 +62,7 @@ export default class Hidder extends Player {
                 })
 
                 this.circularProgress.setScrollFactor(0, 0);
-                this.circularProgress.depth = 50;
+                this.circularProgress.depth = 30;
                 this.abrindo = true;
 
                 //this.lastChest.open();

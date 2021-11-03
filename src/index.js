@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+//import Phaser from "./phaser.min.js";
 
 import Partida from "./partida.js";
 

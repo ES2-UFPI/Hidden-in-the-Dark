@@ -1,6 +1,3 @@
-import mapPNG from "./assets/map/assetsmap.png";
-import mapJSON from "./assets/map/map.json";
-import fogVision from "./assets/players/view-mask.png"
 import Hidder from "./hidder.js";
 import Seeker from "./seeker.js";
 import Chest from "./chest.js";
@@ -17,13 +14,12 @@ export default class Partida extends Phaser.Scene
         shuffle(locations);
 
         this.player = new Hidder(this, 2, 200);
-        //this.player = new Seeker(this, 2, 250);
+
 
         this.chests = [];
         for(var i = 0; i < n; i++){
             this.chests.push(new Chest(this, i, locations[i]));
         }
-
         var vision;
     }
 
@@ -31,11 +27,11 @@ export default class Partida extends Phaser.Scene
         //pre carregando os assets
         //fundo png de agua
         //templates de pixels para fazer o mapa
-        this.load.image("tiles", mapPNG);
+        this.load.image("tiles", "./src/assets/map/assetsmap.png");
         //mapa do jogo feito a partir do template de pixels
-        this.load.tilemapTiledJSON("map", mapJSON);
+        this.load.tilemapTiledJSON("map", "./src/assets/map/map.json");
         //visão do boneco
-        this.load.image("fogVision", fogVision);
+        this.load.image("fogVision", "./src/assets/players/view-mask.png");
         //carregando a skin do jogador
         this.player.preload();
         this.chests.forEach((c)=>{c.preload()});
@@ -57,8 +53,7 @@ export default class Partida extends Phaser.Scene
    
 
         objectCollider.setCollisionByProperty({ collider: true });
-    
-
+        
         // fazendo a fog
         //pegando o tamanho da tela do jogo
         const width = this.scale.width;
@@ -94,21 +89,18 @@ export default class Partida extends Phaser.Scene
         camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
         this.keysText = this.add.text(210, 155, 'keys: '+this.keys, { fontSize: '20px', fill: '#FFFFFF' });
-        this.keysText.depth = 50;
+        this.keysText.depth = 30;
         this.keysText.setScrollFactor(0, 0);
 
         rt.mask = new Phaser.Display.Masks.BitmapMask(this, this.player.vision);
         rt.mask.invertAlpha = true;
     }
 
-    hitPlayer(player){
-    
-    }
-
 
     update(){ 
         var button = this.input.keyboard.createCursorKeys();
         this.player.update(button);
+
     }
 
     addKey(){
@@ -117,7 +109,6 @@ export default class Partida extends Phaser.Scene
     }
     
 }
-
 function shuffle(array) {
     let currentIndex = array.length,  randomIndex;
     // While there remain elements to shuffle...
