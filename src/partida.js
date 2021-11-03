@@ -9,18 +9,16 @@ export default class Partida extends Phaser.Scene
     {
         super();
         this.keys = 0;
-        var n = 10;//quant de baús
+        var n = 4;//quant de baús
 
         // var locations = require("./assets/locations/chest-spawn.json")
         // shuffle(locations)
 
         this.player = new Hidder(this, 2, 200);
-
-
-        this.chests = [];
-        for(var i = 0; i < n; i++){
-            this.chests.push(new Chest(this, i, locations[i]));
-        }
+        // this.chests = [];
+        // for(var i = 0; i < n; i++){
+        //     this.chests.push(new Chest(this, i, locations[i]));
+        // }
 
     }
 
@@ -75,17 +73,18 @@ export default class Partida extends Phaser.Scene
         //define limites de alcançe da câmera
         camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
-        this.keysText = this.add.text(210, 155, 'keys: '+this.keys, { fontSize: '20px', fill: '#FFFFFF' });
-        this.keysText.setScrollFactor(0, 0);
-
     }
 
 
     update(){ 
-        this.keysText.setText('keys: '+this.keys);
+
 
         var button = this.input.keyboard.createCursorKeys();
         this.player.update(button);
+
+        this.scene.launch('hud', this.keys);
+        //this.scene.st
+
 
     }
 
