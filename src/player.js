@@ -1,7 +1,7 @@
 
 export default class Player {
 
-    constructor(game, id, velocidade){
+    constructor(game, id, velocidade,visao){
         this.game = game;
         this.id = id;
         this.name = 'player_'+id;
@@ -11,7 +11,7 @@ export default class Player {
 
         this.prevVelocity = undefined;
         this.prevDir = 'l';
-        
+        this.camp_vision = visao;
     }
 
     preload() {
@@ -21,7 +21,7 @@ export default class Player {
         });
     }
 
-    create (x, y){
+    create (x, y,fog){
 
         this.player = this.game.physics.add.sprite(x, y, this.name);
         //this.player.setCollideWorldBounds(true);
@@ -56,6 +56,23 @@ export default class Player {
         });
 
         this.player.anims.play("rightIdle", true);
+
+        if(this.velocidade == 250){
+            fog.depth = 10;
+        }else{
+            fog.depth = 40;
+        }
+        
+
+        //fazer o campo de visao do personagem
+        this.vision = this.game.make.image({
+            x: this.player.x,
+            y: this.player.y,
+            key: 'fogVision',
+            add: false
+        });
+        //fazendo a mascara que ira deixa ao redor do player sem fog
+        this.vision.scale = this.camp_vision;//seeker 0.3 hidder 0.5
     }
 
     update(button){
@@ -68,6 +85,10 @@ export default class Player {
         //capturar o botao pressionado
         var velocidade_diagonal = Math.sqrt((this.velocidade**2)*2)/2;
     
+        if(this.vision){
+            this.vision.x = this.player.x;
+            this.vision.y = this.player.y;
+	    }
         
         //qual botao esta sendo pressionado e realiza seu movimento respectivo (setas)
         if(button.left.isDown && button.down.isDown){
@@ -120,9 +141,9 @@ export default class Player {
     }
 
     interactions (chests){
-        // chests.forEach((c) => {
-        //     this.game.physics.add.collider(this.player, c.chest);
-        // });
+        chests.forEach((c) => {
+            this.game.physics.add.collider(this.player, c.chest);
+        });
             
     }
 
