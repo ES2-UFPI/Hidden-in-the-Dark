@@ -11,8 +11,8 @@ export default class Partida extends Phaser.Scene
         this.keys = 0;
         var n = 10;//quant de baús
 
-        // var locations = require("./assets/locations/chest-spawn.json")
-        // shuffle(locations)
+        var locations = require("./assets/locations/chest-spawn.json");
+        shuffle(locations);
 
         this.player = new Hidder(this, 2, 200);
 
