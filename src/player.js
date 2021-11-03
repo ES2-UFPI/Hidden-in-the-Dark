@@ -5,7 +5,7 @@ export default class Player {
         this.game = game;
         this.id = id;
         this.name = 'player_'+id;
-        this.caminho = '/src/assets/players/player_'+id+'.png';
+        this.caminho = './src/assets/players/player_'+id+'.png';
         this.velocidade = velocidade;
         this.player = undefined;
 
@@ -120,9 +120,9 @@ export default class Player {
     }
 
     interactions (chests){
-        chests.forEach((c) => {
-            this.game.physics.add.collider(this.player, c.chest);
-        });
+        // chests.forEach((c) => {
+        //     this.game.physics.add.collider(this.player, c.chest);
+        // });
             
     }
 

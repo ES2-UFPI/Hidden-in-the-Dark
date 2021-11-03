@@ -1,9 +1,11 @@
-import Player from "./player";
+
 import CircularProgress from 'phaser3-rex-plugins/plugins/circularprogress.js';
 
 const COLOR_PRIMARY = 0x4e342e;
 const COLOR_LIGHT = 0x7b5e57;
 const COLOR_DARK = 0x260e04;
+import Player from "./player.js";
+
 
 export default class Hidder extends Player {
 
@@ -16,14 +18,15 @@ export default class Hidder extends Player {
     interactions(chests){
         super.interactions(chests);
         this.circularProgress = undefined;
+
         
-        chests.forEach((c) => {//interações com baús
-            this.game.physics.add.overlap(this.player, c.zone, ()=>{
-                this.lastChest = c;
-            });
-        });
+         chests.forEach((c) => {//interações com baús
+             this.game.physics.add.overlap(this.player, c.zone, ()=>{
+                 this.lastChest = c;
+             });
+         });
         
-    }
+     }
 
     preload (){
         this.game.load.plugin('rexcircularprogressplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexcircularprogressplugin.min.js', true);  
@@ -60,7 +63,6 @@ export default class Hidder extends Player {
 
                 this.circularProgress.setScrollFactor(0, 0);
                 this.abrindo = true;
-
 
                 //this.lastChest.open();
                 this.player.anims.play("leftIdle", true);

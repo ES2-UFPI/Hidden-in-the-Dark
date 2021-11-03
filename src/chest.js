@@ -6,13 +6,13 @@ export default class Chest {
         this.game = game;
         this.id = id;
         this.coord = coord;
-        this.caminho = '/src/assets/items/chest.png';
+        this.caminho = './src/assets/items/chest.png';
         this.name = 'chest-'+this.id;
         this.is_open = false;
     }
 
     preload() {
-        this.game.load.image(this.name+'-zone', '/src/assets/items/chest-zone.png');
+        this.game.load.image(this.name+'-zone', './src/assets/items/chest-zone.png');
 
         this.game.load.spritesheet(this.name, this.caminho, {
             frameWidth: 54,
