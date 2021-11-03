@@ -33,6 +33,10 @@ export default class Hidder extends Player {
         super.preload();
     }
     
+    create(x,y){
+        super.create(x,y)
+        this.rt.depth = 40;
+    }
 
     update(button){
         if(button.space.isDown){//apertando espaço
@@ -58,7 +62,8 @@ export default class Hidder extends Player {
                 this.game.tweens.add({
                     targets: this.circularProgress,
                     value: 1,
-                    duration: 10000
+                    duration: 10000,
+                    ease:"Cubic"
                 })
 
                 this.circularProgress.setScrollFactor(0, 0);

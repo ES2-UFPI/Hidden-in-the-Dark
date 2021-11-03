@@ -1,6 +1,3 @@
-import mapPNG from "./assets/map/assetsmap.png";
-import mapJSON from "./assets/map/map.json";
-import fogVision from "./assets/players/view-mask.png"
 import Hidder from "./hidder.js";
 import Seeker from "./seeker.js";
 import Chest from "./chest.js";
@@ -23,7 +20,6 @@ export default class Partida extends Phaser.Scene
         for(var i = 0; i < n; i++){
             this.chests.push(new Chest(this, i, locations[i]));
         }
-
         var vision;
     }
 
@@ -31,11 +27,11 @@ export default class Partida extends Phaser.Scene
         //pre carregando os assets
         //fundo png de agua
         //templates de pixels para fazer o mapa
-        this.load.image("tiles", mapPNG);
+        this.load.image("tiles", "./src/assets/map/assetsmap.png");
         //mapa do jogo feito a partir do template de pixels
-        this.load.tilemapTiledJSON("map", mapJSON);
+        this.load.tilemapTiledJSON("map", "./src/assets/map/map.json");
         //visão do boneco
-        this.load.image("fogVision", fogVision);
+        this.load.image("fogVision", "./src/assets/players/view-mask.png");
         //carregando a skin do jogador
         this.player.preload();
         this.chests.forEach((c)=>{c.preload()});
@@ -57,27 +53,14 @@ export default class Partida extends Phaser.Scene
    
 
         objectCollider.setCollisionByProperty({ collider: true });
-    
-
+        
         // fazendo a fog
         //pegando o tamanho da tela do jogo
         const width = this.scale.width;
         const height = this.scale.height;
 
-        // fazendo uma textura do tamanho do mapa 
-        const rt = this.make.renderTexture({
-            width:4928,
-            height:6378
-        }, true);
-        // preenchedo a textura com preto
-        rt.fill(0x000000, 1);
-        // colocando a textura por cima do chao
-        rt.draw(ground);
-        // setando o preto pra ficar azulado
-        rt.setTint(0x090909); //050505 
-
         //criacao das animacoes do player
-        this.player.create(1834, 527,rt);
+        this.player.create(1834, 527);
         this.physics.add.collider(this.player.player, objectCollider);
 
         //interação player e chest
@@ -96,19 +79,13 @@ export default class Partida extends Phaser.Scene
         this.keysText = this.add.text(210, 155, 'keys: '+this.keys, { fontSize: '20px', fill: '#FFFFFF' });
         this.keysText.depth = 50;
         this.keysText.setScrollFactor(0, 0);
-
-        rt.mask = new Phaser.Display.Masks.BitmapMask(this, this.player.vision);
-        rt.mask.invertAlpha = true;
-    }
-
-    hitPlayer(player){
-    
     }
 
 
     update(){ 
         var button = this.input.keyboard.createCursorKeys();
         this.player.update(button);
+
     }
 
     addKey(){
@@ -117,7 +94,6 @@ export default class Partida extends Phaser.Scene
     }
     
 }
-
 function shuffle(array) {
     let currentIndex = array.length,  randomIndex;
     // While there remain elements to shuffle...
