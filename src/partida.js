@@ -88,7 +88,7 @@ export default class Partida extends Phaser.Scene
         this.keysText = this.add.text(210, 155, 'keys: '+this.keys, { fontSize: '20px', fill: '#FFFFFF' });
         this.keysText.setScrollFactor(0, 0);
 
-       /* this.input.keyboard.on('keydown-UP', () => {
+        this.input.keyboard.on('keydown-UP', () => {
             stepSound.play();
         })
         this.input.keyboard.on('keydown-DOWN', () => {
@@ -100,7 +100,7 @@ export default class Partida extends Phaser.Scene
         this.input.keyboard.on('keydown-RIGHT', () => {
             stepSound.play();
         })
-        */
+
     }
 
 
