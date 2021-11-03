@@ -17,7 +17,7 @@ export default class Partida extends Phaser.Scene
         shuffle(locations);
 
         this.player = new Hidder(this, 2, 200);
-        this.seeker = new Seeker(this, 2, 250);
+        //this.player = new Seeker(this, 2, 250);
 
         this.chests = [];
         for(var i = 0; i < n; i++){
@@ -78,9 +78,7 @@ export default class Partida extends Phaser.Scene
 
         //criacao das animacoes do player
         this.player.create(1834, 527,rt);
-        this.seeker.create(1800, 500, rt);
         this.physics.add.collider(this.player.player, objectCollider);
-        this.physics.add.collider(this.player.player, this.seeker.seeker, this.hitPlayer);
 
         //interação player e chest
         this.chests.forEach((c)=>{c.create()});
