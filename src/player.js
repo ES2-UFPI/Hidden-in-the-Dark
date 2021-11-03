@@ -19,6 +19,9 @@ export default class Player {
             frameWidth: 16,
             frameHeight: 24,
         });
+
+        this.game.load.audio("step-sound", "./src/assets/sounds/step-sound.mp3");
+
     }
 
     create (x, y){
@@ -27,6 +30,7 @@ export default class Player {
         //this.player.setCollideWorldBounds(true);
         this.player.depth = 10;
         
+        const stepSound = this.player.sound.add("step-sound");
 
         const anims = this.game.anims;
         anims.create({
@@ -95,14 +99,18 @@ export default class Player {
         //fazer a animacao de movimento do boneco correspondente ao botao pressionado
         if (button.left.isDown) {
             this.player.anims.play("leftWalk", true);
+            stepSound.play();
         } else if (button.right.isDown) {
             this.player.anims.play("rightWalk", true);
+            stepSound.play();
         } else if (button.up.isDown) {
             if (this.prevDir == 'l') this.player.anims.play("leftWalk", true);
             else this.player.anims.play("rightWalk", true);
+            stepSound.play();
         } else if (button.down.isDown) {
             if (this.prevDir == 'l') this.player.anims.play("leftWalk", true);
             else this.player.anims.play("rightWalk", true);
+            stepSound.play();
         } else {
             //fazer o boneco voltar a sua animacao de parado depois de parar de andar
             if (this.prevVelocity.x < 0) this.player.anims.play("leftIdle", true);
@@ -116,6 +124,7 @@ export default class Player {
             
             if (this.prevDir == 'l') this.player.anims.play("leftIdle", true);
             else this.player.anims.play("rightIdle", true);
+            stepSound.stop();
         }
     }
 

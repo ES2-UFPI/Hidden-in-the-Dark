@@ -31,6 +31,10 @@ export default class Partida extends Phaser.Scene
         this.load.image("tiles", "./src/assets/map/assetsmap.png");
         //mapa do jogo feito a partir do template de pixels
         this.load.tilemapTiledJSON("map", "./src/assets/map/map.json");
+        
+        //sounds
+        this.load.audio("background-music", "./src/assets/sounds/background-music_dbd.mp3");
+        this.load.audio("step-sound", "./src/assets/sounds/step-sound.mp3");
 
         //carregando a skin do jogador
         this.player.preload();
@@ -39,6 +43,11 @@ export default class Partida extends Phaser.Scene
       
     create (){
         //mapa
+
+        //music
+
+        const backgroundMusic = this.sound.add("background-music");
+        backgroundMusic.play();
 
         //criando uma key para trabalhar com o map setado no preload
         const map = this.make.tilemap({ key: "map" });
@@ -53,7 +62,8 @@ export default class Partida extends Phaser.Scene
         const ground = map.createLayer("ground", tileset, 0, 0);
         //coisas que colidem com o personagem
         const objectCollider = map.createLayer("objectCollider", tileset, 0, 0);
-   
+        
+        const stepSound = this.sound.add("step-sound");
 
         objectCollider.setCollisionByProperty({ collider: true });
     
@@ -78,6 +88,19 @@ export default class Partida extends Phaser.Scene
         this.keysText = this.add.text(210, 155, 'keys: '+this.keys, { fontSize: '20px', fill: '#FFFFFF' });
         this.keysText.setScrollFactor(0, 0);
 
+       /* this.input.keyboard.on('keydown-UP', () => {
+            stepSound.play();
+        })
+        this.input.keyboard.on('keydown-DOWN', () => {
+            stepSound.play();
+        })
+        this.input.keyboard.on('keydown-LEFT', () => {
+            stepSound.play();
+        })
+        this.input.keyboard.on('keydown-RIGHT', () => {
+            stepSound.play();
+        })
+        */
     }
 
 
@@ -86,7 +109,6 @@ export default class Partida extends Phaser.Scene
 
         var button = this.input.keyboard.createCursorKeys();
         this.player.update(button);
-
     }
 
     addKey(){
