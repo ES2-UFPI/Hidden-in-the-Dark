@@ -10,7 +10,7 @@ import Player from "./player.js";
 export default class Hidder extends Player {
 
     constructor(game, id, velocidade){
-        super(game, id, velocidade);
+        super(game, id, velocidade,0.5);
         this.lastChest = null;
         this.abrindo = false;
     }
@@ -58,10 +58,11 @@ export default class Hidder extends Player {
                 this.game.tweens.add({
                     targets: this.circularProgress,
                     value: 1,
-                    duration: 1000
+                    duration: 10000
                 })
 
                 this.circularProgress.setScrollFactor(0, 0);
+                this.circularProgress.depth = 50;
                 this.abrindo = true;
 
                 //this.lastChest.open();
