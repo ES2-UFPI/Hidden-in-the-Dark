@@ -14,7 +14,7 @@ export default class Partida extends Phaser.Scene
         shuffle(locations);
 
         this.player = new Hidder(this, 2, 200);
-
+        //this.player = new Seeker(this, 2, 250);
 
         this.chests = [];
         for(var i = 0; i < n; i++){
@@ -59,20 +59,8 @@ export default class Partida extends Phaser.Scene
         const width = this.scale.width;
         const height = this.scale.height;
 
-        // fazendo uma textura do tamanho do mapa 
-        const rt = this.make.renderTexture({
-            width:4928,
-            height:6378
-        }, true);
-        // preenchedo a textura com preto
-        rt.fill(0x000000, 1);
-        // colocando a textura por cima do chao
-        rt.draw(ground);
-        // setando o preto pra ficar azulado
-        rt.setTint(0x090909); //050505 
-
         //criacao das animacoes do player
-        this.player.create(1834, 527,rt);
+        this.player.create(1834, 527);
         this.physics.add.collider(this.player.player, objectCollider);
 
         //interação player e chest
@@ -89,11 +77,8 @@ export default class Partida extends Phaser.Scene
         camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
         this.keysText = this.add.text(210, 155, 'keys: '+this.keys, { fontSize: '20px', fill: '#FFFFFF' });
-        this.keysText.depth = 30;
+        this.keysText.depth = 50;
         this.keysText.setScrollFactor(0, 0);
-
-        rt.mask = new Phaser.Display.Masks.BitmapMask(this, this.player.vision);
-        rt.mask.invertAlpha = true;
     }
 
 

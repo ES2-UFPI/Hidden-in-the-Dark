@@ -33,6 +33,10 @@ export default class Hidder extends Player {
         super.preload();
     }
     
+    create(x,y){
+        super.create(x,y)
+        this.rt.depth = 40;
+    }
 
     update(button){
         if(button.space.isDown){//apertando espaço
@@ -62,7 +66,7 @@ export default class Hidder extends Player {
                 })
 
                 this.circularProgress.setScrollFactor(0, 0);
-                this.circularProgress.depth = 30;
+                this.circularProgress.depth = 50;
                 this.abrindo = true;
 
                 //this.lastChest.open();

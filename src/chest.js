@@ -24,7 +24,7 @@ export default class Chest {
 
         this.chest = this.game.physics.add.staticSprite(this.coord['x'], this.coord['y'], this.name);
         this.zone = this.game.physics.add.staticImage(this.coord['x'], this.coord['y'], this.name+'-zone');
-        this.chest.depth=10;
+        this.chest.depth = 20;
         //this.zone.setScale(1.5).update();
 
         this.zone.setVisible(false);
