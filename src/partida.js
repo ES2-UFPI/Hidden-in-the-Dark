@@ -1,7 +1,7 @@
 import Hidder from "./hidder.js";
 import Seeker from "./seeker.js";
 import Chest from "./chest.js";
-
+import { getChestLocation } from "./chest-spawn.js";
 export default class Partida extends Phaser.Scene
 {
     constructor ()
@@ -9,8 +9,7 @@ export default class Partida extends Phaser.Scene
         super();
         this.keys = 0;
         var n = 10;//quant de baús
-
-        var locations = require("./assets/locations/chest-spawn.json");
+        var locations = getChestLocation();
         shuffle(locations);
 
         this.player = new Hidder(this, 2, 200);
