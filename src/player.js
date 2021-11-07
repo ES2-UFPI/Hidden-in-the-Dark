@@ -20,6 +20,9 @@ export default class Player {
             frameWidth: 16,
             frameHeight: 24,
         });
+        this.game.load.audio('step', [
+            "./src/assets/sounds/step-sound.mp3"
+        ]);
     }
 
     create (){
@@ -31,32 +34,32 @@ export default class Player {
 
         const anims = this.game.anims;
         anims.create({
-            key: "leftWalk",
+            key: "walkLeft",
             frames: anims.generateFrameNames(this.name, { start: 19, end: 16 }),
             frameRate: 10,
             repeat: -1,
         });
         anims.create({
-            key: "rightWalk",
+            key: "walkRight",
             frames: anims.generateFrameNames(this.name, { start: 12, end: 15 }),
             frameRate: 10,
             repeat: -1,
         });
 
         anims.create({
-            key: "leftIdle",
+            key: "idleLeft",
             frames: anims.generateFrameNames(this.name, { start: 8, end: 11 }),
             frameRate: 10,
             repeat: -1,
         });
         anims.create({
-            key: "rightIdle",
+            key: "idleRight",
             frames: anims.generateFrameNames(this.name, { start: 4, end: 7 }),
             frameRate: 10,
             repeat: -1,
         });
 
-        this.player.anims.play("rightIdle", true);
+        this.player.anims.play("idleRight", true);
 
         //fazer o campo de visao do personagem
         this.vision = this.game.make.image({
@@ -68,6 +71,7 @@ export default class Player {
         //fazendo a mascara que ira deixa ao redor do player sem fog
         this.vision.scale = this.camp_vision;//seeker 0.3 hidder 0.5
 
+        this.step = null;
     }
 
     update(button){
@@ -107,30 +111,47 @@ export default class Player {
             this.player.body.setVelocityY(this.velocidade);
         }
         //player.anims.currentAnim.key
+
+        if(this.player.anims.currentAnim.key[0] == 'w' && this.step == null){
+            this.step = this.game.sound.add('step');
+            this.step.play({
+                mute:false,
+                loop:true, 
+                volume:0.3,
+                rate:1,
+                detune:0,
+                seek:0,
+                delay:0
+            });
+        }
+        if(this.step != null && this.player.anims.currentAnim.key[0] == 'i'){
+            this.step.destroy();
+            this.step=null;
+        }
         //fazer a animacao de movimento do boneco correspondente ao botao pressionado
         if (button.left.isDown) {
-            this.player.anims.play("leftWalk", true);
+            this.player.anims.play("walkLeft", true);
         } else if (button.right.isDown) {
-            this.player.anims.play("rightWalk", true);
+            this.player.anims.play("walkRight", true);
         } else if (button.up.isDown) {
-            if (this.prevDir == 'l') this.player.anims.play("leftWalk", true);
-            else this.player.anims.play("rightWalk", true);
+            if (this.prevDir == 'l') this.player.anims.play("walkLeft", true);
+            else this.player.anims.play("walkRight", true);
         } else if (button.down.isDown) {
-            if (this.prevDir == 'l') this.player.anims.play("leftWalk", true);
-            else this.player.anims.play("rightWalk", true);
+            if (this.prevDir == 'l') this.player.anims.play("walkLeft", true);
+            else this.player.anims.play("walkRight", true);
         } else {
             //fazer o boneco voltar a sua animacao de parado depois de parar de andar
-            if (this.prevVelocity.x < 0) this.player.anims.play("leftIdle", true);
-            else if (this.prevVelocity.x > 0) this.player.anims.play("rightIdle", true);
+            if (this.prevVelocity.x < 0) this.player.anims.play("idleLeft", true);
+            else if (this.prevVelocity.x > 0) this.player.anims.play("idleRight", true);
             else if (this.prevVelocity.y < 0) 
-                if (this.prevDir == 'l') this.player.anims.play("leftIdle", true);
-                else this.player.anims.play("rightIdle", true);
+                if (this.prevDir == 'l') this.player.anims.play("idleLeft", true);
+                else this.player.anims.play("idleRight", true);
             else if (this.prevVelocity.y > 0) 
-                if (this.prevDir == 'l') this.player.anims.play("leftIdle", true);
-                else this.player.anims.play("rightIdle", true);
+                if (this.prevDir == 'l') this.player.anims.play("idleLeft", true);
+                else this.player.anims.play("idleRight", true);
             
-            if (this.prevDir == 'l') this.player.anims.play("leftIdle", true);
-            else this.player.anims.play("rightIdle", true);
+            if (this.prevDir == 'l') this.player.anims.play("idleLeft", true);
+            else this.player.anims.play("idleRight", true);
         }
     }
 

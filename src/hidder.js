@@ -16,7 +16,7 @@ export default class Hidder extends Player {
         this.alive = true;
     }
 
-    interactions(chests){
+    interactions(chests,hidders){
         super.interactions(chests);
         this.circularProgress = undefined;
 
@@ -32,6 +32,9 @@ export default class Hidder extends Player {
     preload (){
         this.game.load.plugin('rexcircularprogressplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexcircularprogressplugin.min.js', true);  
         this.game.load.image('red', './src/assets/particles/red.png');
+        this.game.load.audio('opening_chests', [
+            "./src/assets/sounds/opening_chest.mp3"
+        ]);
         super.preload();
     }
     
@@ -39,16 +42,26 @@ export default class Hidder extends Player {
         super.create()
         rt.depth = 40;
     }
-
+    
     update(button){
         if(button.space.isDown){//apertando espaço
             if (this.abrindo){//abrindo baú
-                if (this.prevDir == 'l') this.player.anims.play("leftIdle", true);
-                else this.player.anims.play("rightIdle", true);
+                if (this.prevDir == 'l') this.player.anims.play("idleLeft", true);
+                else this.player.anims.play("idleRight", true);
                 this.player.body.setVelocity(0);
                 return;
             }
             if (this.lastChest != null && this.game.physics.overlap(this.player, this.lastChest.zone) && !this.abrindo && !this.lastChest.is_open) {
+                this.opening_chests = this.game.sound.add('opening_chests');
+                this.opening_chests.play({
+                    mute:false,
+                    loop:true, 
+                    volume:0.3,
+                    rate:1,
+                    detune:0,
+                    seek:0,
+                    delay:0
+                });
                 this.circularProgress = this.game.add.rexCircularProgress({
                     x: 570, y: 420,
                     radius: 20,
@@ -73,8 +86,6 @@ export default class Hidder extends Player {
                 this.abrindo = true;
 
                 //this.lastChest.open();
-                this.player.anims.play("leftIdle", true);
-                this.player.body.setVelocity(0);
                 return;
             }
         } 
@@ -82,6 +93,7 @@ export default class Hidder extends Player {
             if (this.abrindo){
                 this.circularProgress.destroy();
                 this.abrindo = false;
+                this.opening_chests.destroy();
             }
         }
         super.update(button);
