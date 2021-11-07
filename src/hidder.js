@@ -13,6 +13,7 @@ export default class Hidder extends Player {
         super(game, id, velocidade,0.5, spawnCoord);
         this.lastChest = null;
         this.abrindo = false;
+        this.alive = true;
     }
 
     interactions(chests){
@@ -30,6 +31,7 @@ export default class Hidder extends Player {
 
     preload (){
         this.game.load.plugin('rexcircularprogressplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexcircularprogressplugin.min.js', true);  
+        this.game.load.image('red', './src/assets/particles/red.png');
         super.preload();
     }
     
@@ -92,6 +94,31 @@ export default class Hidder extends Player {
             this.abrindo = false;
             this.circularProgress.destroy();
         }
+    }
+
+    die(){
+        var x = this.player.x
+        var y = this.player.y
+        this.player.destroy();
+        if (this.circularProgress != null) this.circularProgress.destroy();
+        this.alive = false;
+        var particles = this.game.add.particles('red');
+        var emitter = particles.createEmitter();
+        emitter.setPosition(x, y);
+        emitter.setSpeed(60);
+        emitter.setQuantity(1);
+        emitter.setScale(0.1);
+        emitter.setLifespan(100);
+        emitter.setBlendMode(Phaser.BlendModes.ADD);
+        function destroyParticle (){
+            emitter.manager.emitters.remove(emitter);
+        }
+        this.game.time.addEvent({
+            delay: 1500,                // ms
+            callback: destroyParticle,
+            //callbackScope: thisArg,
+            loop: false
+        });
     }
 
 }

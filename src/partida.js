@@ -13,7 +13,7 @@ export default class Partida extends Phaser.Scene
         shuffle(locations);
 
         this.player = new Hidder(this, 2, 200, {'x': 1834, 'y': 527});
-        this.playerPrincipal = new Seeker(this, 3, 200, {'x': 1834, 'y': 527});
+        this.playerPrincipal = new Seeker(this, 3, 200, {'x': 1734, 'y': 527});
         //this.player = new Seeker(this, 2, 250);
 
         this.chests = [];
@@ -82,7 +82,7 @@ export default class Partida extends Phaser.Scene
         
         //adiciona colisões
         this.player.interactions(this.chests);
-        this.playerPrincipal.interactions(this.chests);
+        this.playerPrincipal.interactions(this.chests, [this.player]);
         
         //fazer a camera seguir o personagem
         const camera = this.cameras.main.setZoom(2);
