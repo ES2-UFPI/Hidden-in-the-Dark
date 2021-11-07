@@ -15,8 +15,8 @@ export default class Chest {
         this.game.load.image(this.name+'-zone', './src/assets/items/chest-zone.png');
 
         this.game.load.spritesheet(this.name, this.caminho, {
-            frameWidth: 54,
-            frameHeight: 54,
+            frameWidth: 15,
+            frameHeight: 18,
         });
     }
 
@@ -33,13 +33,13 @@ export default class Chest {
 
         anims.create({
             key: "close",
-            frames: anims.generateFrameNames(this.name, { start: 77, end: 77 }),
+            frames: anims.generateFrameNames(this.name, { start: 0, end: 0 }),
             frameRate: 10,
             repeat: -1,
         });
         anims.create({
             key: "open",
-            frames: anims.generateFrameNames(this.name, { start: 77, end: 81 }),
+            frames: anims.generateFrameNames(this.name, { start:0, end: 2 }),
             frameRate: 10
         });
 

@@ -1,13 +1,14 @@
 
 export default class Player {
 
-    constructor(game, id, velocidade,visao){
+    constructor(game, id, velocidade,visao, spawnCoord){
         this.game = game;
         this.id = id;
         this.name = 'player_'+id;
         this.caminho = './src/assets/players/player_'+id+'.png';
         this.velocidade = velocidade;
         this.player = undefined;
+        this.spawnCoord = spawnCoord;
 
         this.prevVelocity = undefined;
         this.prevDir = 'l';
@@ -21,11 +22,11 @@ export default class Player {
         });
     }
 
-    create (x, y){
+    create (){
 
-        this.player = this.game.physics.add.sprite(x, y, this.name);
+        this.player = this.game.physics.add.sprite(this.spawnCoord['x'], this.spawnCoord['y'], this.name);
         //this.player.setCollideWorldBounds(true);
-        this.player.depth = 10;
+        this.player.depth = 0;
         
 
         const anims = this.game.anims;
@@ -57,19 +58,6 @@ export default class Player {
 
         this.player.anims.play("rightIdle", true);
 
-        // fazendo uma textura do tamanho do mapa 
-        this.rt = this.game.make.renderTexture({
-            width:4928,
-            height:6378
-        }, true);
-        // preenchedo a textura com preto
-        this.rt.fill(0x000000, 1);
-        // colocando a textura por cima do chao
-        this.rt.draw(this.game.ground);
-        // setando o preto pra ficar azulado
-        this.rt.setTint(0x121212); //050505
-
-
         //fazer o campo de visao do personagem
         this.vision = this.game.make.image({
             x: this.player.x,
@@ -80,12 +68,9 @@ export default class Player {
         //fazendo a mascara que ira deixa ao redor do player sem fog
         this.vision.scale = this.camp_vision;//seeker 0.3 hidder 0.5
 
-        this.rt.mask = new Phaser.Display.Masks.BitmapMask(this.game, this.game.player.vision);
-        this.rt.mask.invertAlpha = true;
     }
 
     update(button){
-
         this.prevVelocity = this.player.body.velocity.clone();
         this.prevDir = this.player.anims.currentAnim.key.toString()[0];
         
@@ -152,8 +137,6 @@ export default class Player {
     interactions (chests){
         chests.forEach((c) => {
             this.game.physics.add.collider(this.player, c.chest);
-        });
-            
+        }); 
     }
-
 }

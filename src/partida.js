@@ -12,14 +12,14 @@ export default class Partida extends Phaser.Scene
         var locations = getChestLocation();
         shuffle(locations);
 
-        this.player = new Hidder(this, 2, 200);
+        this.player = new Hidder(this, 2, 200, {'x': 1834, 'y': 527});
+        this.playerPrincipal = new Seeker(this, 3, 200, {'x': 1734, 'y': 527});
         //this.player = new Seeker(this, 2, 250);
 
         this.chests = [];
         for(var i = 0; i < n; i++){
             this.chests.push(new Chest(this, i, locations[i]));
         }
-        var vision;
     }
 
     preload (){
@@ -33,6 +33,7 @@ export default class Partida extends Phaser.Scene
         this.load.image("fogVision", "./src/assets/players/view-mask.png");
         //carregando a skin do jogador
         this.player.preload();
+        this.playerPrincipal.preload();
         this.chests.forEach((c)=>{c.preload()});
     }
       
@@ -58,19 +59,34 @@ export default class Partida extends Phaser.Scene
         const width = this.scale.width;
         const height = this.scale.height;
 
+        // fazendo uma textura do tamanho do mapa 
+        const rt = this.make.renderTexture({
+            width:4928,
+            height:6378
+        }, true);
+        // preenchedo a textura com preto
+        rt.fill(0x000000, 1);
+        // colocando a textura por cima do chao
+        rt.draw(ground);
+        // setando o preto pra ficar azulado
+        rt.setTint(0x121212); //050505
+
         //criacao das animacoes do player
-        this.player.create(1834, 527);
+        this.player.create(rt);
+        this.playerPrincipal.create(rt);
         this.physics.add.collider(this.player.player, objectCollider);
+        this.physics.add.collider(this.playerPrincipal.player, objectCollider);
 
         //interação player e chest
         this.chests.forEach((c)=>{c.create()});
         
         //adiciona colisões
-        this.player.interactions(this.chests)
+        this.player.interactions(this.chests);
+        this.playerPrincipal.interactions(this.chests, [this.player]);
         
         //fazer a camera seguir o personagem
         const camera = this.cameras.main.setZoom(2);
-        camera.startFollow(this.player.player);
+        camera.startFollow(this.playerPrincipal.player);
 
         //define limites de alcançe da câmera
         camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -78,12 +94,17 @@ export default class Partida extends Phaser.Scene
         this.keysText = this.add.text(210, 155, 'keys: '+this.keys, { fontSize: '20px', fill: '#FFFFFF' });
         this.keysText.depth = 50;
         this.keysText.setScrollFactor(0, 0);
+
+        
+        rt.mask = new Phaser.Display.Masks.BitmapMask(this, this.playerPrincipal.vision);
+        rt.mask.invertAlpha = true;
     }
 
 
     update(){ 
         var button = this.input.keyboard.createCursorKeys();
-        this.player.update(button);
+        //this.player.update(button);
+        this.playerPrincipal.update(button);
 
     }
 
