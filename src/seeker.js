@@ -2,8 +2,8 @@ import Player from "./player.js";
 
 export default class Seeker extends Player {
 
-    constructor(game, id, velocidade, active){
-        super(game, id, velocidade, 0.35, active);
+    constructor(game, id, velocidade, spawnCoord){
+        super(game, id, velocidade, 0.35, spawnCoord);
     }   
 
     create(){
@@ -12,7 +12,6 @@ export default class Seeker extends Player {
     }
 
     update(button){
-        if (!this.active) return;
         super.update(button);
     }
 }

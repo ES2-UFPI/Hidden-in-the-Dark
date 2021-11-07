@@ -1,14 +1,13 @@
 
 export default class Player {
 
-    constructor(game, id, velocidade,visao, spawnCoord, active){
+    constructor(game, id, velocidade,visao, spawnCoord){
         this.game = game;
         this.id = id;
         this.name = 'player_'+id;
         this.caminho = './src/assets/players/player_'+id+'.png';
         this.velocidade = velocidade;
         this.player = undefined;
-        this.active = active;
         this.spawnCoord = spawnCoord;
 
         this.prevVelocity = undefined;
@@ -87,7 +86,6 @@ export default class Player {
     }
 
     update(button){
-        if (!this.active) return;
         this.prevVelocity = this.player.body.velocity.clone();
         this.prevDir = this.player.anims.currentAnim.key.toString()[0];
         

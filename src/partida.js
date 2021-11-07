@@ -12,8 +12,8 @@ export default class Partida extends Phaser.Scene
         var locations = getChestLocation();
         shuffle(locations);
 
-        this.player = new Hidder(this, 2, 200, {'x': 1834, 'y': 527}, false);
-        this.player2 = new Seeker(this, 3, 200, {'x': 1834, 'y': 527}, true);
+        this.player = new Hidder(this, 2, 200, {'x': 1834, 'y': 527});
+        this.player2 = new Seeker(this, 3, 200, {'x': 1834, 'y': 527});
         //this.player = new Seeker(this, 2, 250);
 
         this.chests = [];
