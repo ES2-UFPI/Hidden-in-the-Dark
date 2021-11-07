@@ -67,7 +67,7 @@ export default class Partida extends Phaser.Scene
         // preenchedo a textura com preto
         rt.fill(0x000000, 1);
         // colocando a textura por cima do chao
-        rt.draw(this.game.ground);
+        rt.draw(ground);
         // setando o preto pra ficar azulado
         rt.setTint(0x121212); //050505
 
