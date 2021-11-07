@@ -1,13 +1,15 @@
 
 export default class Player {
 
-    constructor(game, id, velocidade,visao){
+    constructor(game, id, velocidade,visao, spawnCoord, active){
         this.game = game;
         this.id = id;
         this.name = 'player_'+id;
         this.caminho = './src/assets/players/player_'+id+'.png';
         this.velocidade = velocidade;
         this.player = undefined;
+        this.active = active;
+        this.spawnCoord = spawnCoord;
 
         this.prevVelocity = undefined;
         this.prevDir = 'l';
@@ -21,9 +23,9 @@ export default class Player {
         });
     }
 
-    create (x, y){
+    create (){
 
-        this.player = this.game.physics.add.sprite(x, y, this.name);
+        this.player = this.game.physics.add.sprite(this.spawnCoord['x'], this.spawnCoord['y'], this.name);
         //this.player.setCollideWorldBounds(true);
         this.player.depth = 10;
         
@@ -85,7 +87,7 @@ export default class Player {
     }
 
     update(button){
-
+        if (!this.active) return;
         this.prevVelocity = this.player.body.velocity.clone();
         this.prevDir = this.player.anims.currentAnim.key.toString()[0];
         
@@ -152,8 +154,6 @@ export default class Player {
     interactions (chests){
         chests.forEach((c) => {
             this.game.physics.add.collider(this.player, c.chest);
-        });
-            
+        }); 
     }
-
 }

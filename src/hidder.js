@@ -9,8 +9,8 @@ import Player from "./player.js";
 
 export default class Hidder extends Player {
 
-    constructor(game, id, velocidade){
-        super(game, id, velocidade,0.5);
+    constructor(game, id, velocidade, active){
+        super(game, id, velocidade,0.5, active);
         this.lastChest = null;
         this.abrindo = false;
     }
@@ -33,12 +33,13 @@ export default class Hidder extends Player {
         super.preload();
     }
     
-    create(x,y){
-        super.create(x,y)
+    create(){
+        super.create()
         this.rt.depth = 40;
     }
 
     update(button){
+        if (!this.active) return;
         if(button.space.isDown){//apertando espaço
             if (this.abrindo){//abrindo baú
                 if (this.prevDir == 'l') this.player.anims.play("leftIdle", true);

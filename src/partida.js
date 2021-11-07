@@ -12,14 +12,14 @@ export default class Partida extends Phaser.Scene
         var locations = getChestLocation();
         shuffle(locations);
 
-        this.player = new Hidder(this, 2, 200);
+        this.player = new Hidder(this, 2, 200, {'x': 1834, 'y': 527}, false);
+        this.player2 = new Seeker(this, 3, 200, {'x': 1834, 'y': 527}, true);
         //this.player = new Seeker(this, 2, 250);
 
         this.chests = [];
         for(var i = 0; i < n; i++){
             this.chests.push(new Chest(this, i, locations[i]));
         }
-        var vision;
     }
 
     preload (){
@@ -33,6 +33,7 @@ export default class Partida extends Phaser.Scene
         this.load.image("fogVision", "./src/assets/players/view-mask.png");
         //carregando a skin do jogador
         this.player.preload();
+        this.player2.preload();
         this.chests.forEach((c)=>{c.preload()});
     }
       
@@ -59,18 +60,21 @@ export default class Partida extends Phaser.Scene
         const height = this.scale.height;
 
         //criacao das animacoes do player
-        this.player.create(1834, 527);
+        this.player.create();
+        this.player2.create();
         this.physics.add.collider(this.player.player, objectCollider);
+        this.physics.add.collider(this.player2.player, objectCollider);
 
         //interação player e chest
         this.chests.forEach((c)=>{c.create()});
         
         //adiciona colisões
-        this.player.interactions(this.chests)
+        this.player.interactions(this.chests);
+        this.player2.interactions(this.chests);
         
         //fazer a camera seguir o personagem
         const camera = this.cameras.main.setZoom(2);
-        camera.startFollow(this.player.player);
+        camera.startFollow(this.player2.player);
 
         //define limites de alcançe da câmera
         camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -83,7 +87,8 @@ export default class Partida extends Phaser.Scene
 
     update(){ 
         var button = this.input.keyboard.createCursorKeys();
-        this.player.update(button);
+        //this.player.update(button);
+        this.player2.update(button);
 
     }
 
