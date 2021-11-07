@@ -12,6 +12,9 @@ export default class Seeker extends Player {
 
     preload(){
         this.game.load.image(this.name+'-hitbox', './src/assets/items/chest-zone.png');
+        this.game.load.audio('hit', [
+            "./src/assets/sounds/hit-knife.mp3"
+        ]);
         super.preload()
     }
 
@@ -38,6 +41,16 @@ export default class Seeker extends Player {
         super.update(button);
         if(button.space.isDown){//apertando espaço
             if (this.cooldown) return; 
+            this.hit = this.game.sound.add('hit');
+            this.hit.play({
+                mute:false,
+                loop:false, 
+                volume:1,
+                rate:1,
+                detune:0,
+                seek:0,
+                delay:0
+            });
             this.circularProgress = this.game.add.rexCircularProgress({
                 x: 570, y: 420,
                 radius: 20,
@@ -69,5 +82,6 @@ export default class Seeker extends Player {
 
     kill(){
         this.lastHidder.die();
+
     }
 }

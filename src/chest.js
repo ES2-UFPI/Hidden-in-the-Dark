@@ -18,6 +18,10 @@ export default class Chest {
             frameWidth: 15,
             frameHeight: 18,
         });
+
+        this.game.load.audio('chest_open', [
+            "./src/assets/sounds/chest-sound-2.mp3"
+        ]);
     }
 
     create (){
@@ -52,6 +56,18 @@ export default class Chest {
             this.chest.anims.play('open', true);
             this.is_open = true;
             this.game.addKey();
+
+            var chest_open = this.game.sound.add('chest_open');
+            var chest_open_config={
+            mute:false,
+            loop:false, 
+            volume:0.6,
+            rate:1,
+            detune:0,
+            seek:0,
+            delay:0
+            };
+            chest_open.play(chest_open_config);
         }
     }
 

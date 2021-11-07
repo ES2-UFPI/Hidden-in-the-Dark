@@ -8,12 +8,12 @@ export default class Partida extends Phaser.Scene
     {
         super();
         this.keys = 0;
-        var n = 10;//quant de baús
+        var n = 12;//quant de baús
         var locations = getChestLocation();
         shuffle(locations);
 
-        this.player = new Hidder(this, 2, 200, {'x': 1834, 'y': 527});
-        this.playerPrincipal = new Seeker(this, 3, 200, {'x': 1734, 'y': 527});
+        this.playerPrincipal = new Hidder(this, 2, 200, {'x': 1834, 'y': 527});
+        this.player = new Seeker(this, 3, 200, {'x': 1734, 'y': 527});
         //this.player = new Seeker(this, 2, 250);
 
         this.chests = [];
@@ -35,6 +35,10 @@ export default class Partida extends Phaser.Scene
         this.player.preload();
         this.playerPrincipal.preload();
         this.chests.forEach((c)=>{c.preload()});
+
+        this.load.audio('theme', [
+            "./src/assets/sounds/musica_de_fundo.mp3"
+        ]);
     }
       
     create (){
@@ -81,7 +85,7 @@ export default class Partida extends Phaser.Scene
         this.chests.forEach((c)=>{c.create()});
         
         //adiciona colisões
-        this.player.interactions(this.chests);
+        this.player.interactions(this.chests, [this.player]);
         this.playerPrincipal.interactions(this.chests, [this.player]);
         
         //fazer a camera seguir o personagem
@@ -98,6 +102,19 @@ export default class Partida extends Phaser.Scene
         
         rt.mask = new Phaser.Display.Masks.BitmapMask(this, this.playerPrincipal.vision);
         rt.mask.invertAlpha = true;
+
+        //som
+        var background_music = this.sound.add('theme');
+        var background_music_config={
+            mute:false,
+            loop:true, 
+            volume:0.1,
+            rate:1,
+            detune:0,
+            seek:0,
+            delay:0
+        };
+        background_music.play(background_music_config);
     }
 
 
