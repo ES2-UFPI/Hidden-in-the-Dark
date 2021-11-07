@@ -58,19 +58,6 @@ export default class Player {
 
         this.player.anims.play("rightIdle", true);
 
-        // fazendo uma textura do tamanho do mapa 
-        this.rt = this.game.make.renderTexture({
-            width:4928,
-            height:6378
-        }, true);
-        // preenchedo a textura com preto
-        this.rt.fill(0x000000, 1);
-        // colocando a textura por cima do chao
-        this.rt.draw(this.game.ground);
-        // setando o preto pra ficar azulado
-        this.rt.setTint(0x121212); //050505
-
-
         //fazer o campo de visao do personagem
         this.vision = this.game.make.image({
             x: this.player.x,
@@ -81,8 +68,6 @@ export default class Player {
         //fazendo a mascara que ira deixa ao redor do player sem fog
         this.vision.scale = this.camp_vision;//seeker 0.3 hidder 0.5
 
-        this.rt.mask = new Phaser.Display.Masks.BitmapMask(this.game, this.game.player.vision);
-        this.rt.mask.invertAlpha = true;
     }
 
     update(button){

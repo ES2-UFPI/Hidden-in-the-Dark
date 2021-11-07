@@ -33,9 +33,9 @@ export default class Hidder extends Player {
         super.preload();
     }
     
-    create(){
+    create(rt){
         super.create()
-        this.rt.depth = 40;
+        rt.depth = 40;
     }
 
     update(button){

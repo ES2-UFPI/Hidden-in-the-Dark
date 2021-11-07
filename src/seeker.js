@@ -6,9 +6,9 @@ export default class Seeker extends Player {
         super(game, id, velocidade, 0.35, spawnCoord);
     }   
 
-    create(){
+    create(rt){
         super.create()
-        this.rt.depth = 10;
+        rt.depth = 10;
     }
 
     update(button){
