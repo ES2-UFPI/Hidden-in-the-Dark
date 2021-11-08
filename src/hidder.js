@@ -105,6 +105,7 @@ export default class Hidder extends Player {
             this.lastChest.open();
             this.abrindo = false;
             this.circularProgress.destroy();
+            this.opening_chests.destroy();
         }
     }
 
