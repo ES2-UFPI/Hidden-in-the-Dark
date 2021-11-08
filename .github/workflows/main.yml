@@ -1,8 +1,8 @@
-name: DEV - Build & deploy
+name: Main - Build & deploy
 on:
  push:
    branches:
-     - dev
+     - main
 jobs:
   build:
    name: Build
@@ -29,7 +29,7 @@ jobs:
    name: Deploy
    needs: build
    runs-on: ubuntu-latest
-   if: github.ref == 'refs/heads/dev'
+   if: github.ref == 'refs/heads/main'
    steps:
    - name: Download artifact
      uses: actions/download-artifact@v2

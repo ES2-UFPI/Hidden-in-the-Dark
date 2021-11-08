@@ -1,6 +1,6 @@
-name: DEV - Build & deploy
+name: DEV (pullrequest) - Build 
 on:
- push:
+ pull_request:
    branches:
      - dev
 jobs:
@@ -17,28 +17,11 @@ jobs:
      with:
        node-version: ${{ matrix.node-version }}
    - name: Install Packages
-     run: yarn install
-   - name: Build
+     run: yarn install   
+   - name: Build project
      run: yarn build
    - name: Upload production-ready build files
      uses: actions/upload-artifact@v2
      with:
        name: production-files
-       path: ./
-  deploy:
-   name: Deploy
-   needs: build
-   runs-on: ubuntu-latest
-   if: github.ref == 'refs/heads/dev'
-   steps:
-   - name: Download artifact
-     uses: actions/download-artifact@v2
-     with:
-       name: production-files
-       path: ./
-
-   - name: Deploy to gh-pages
-     uses: peaceiris/actions-gh-pages@v3
-     with:
-       github_token: ${{ secrets.GITHUB_TOKEN }}
-       publish_dir: ./
+       path: ./build
