@@ -1,30 +1,19 @@
-import Phaser from 'phaser';
-import MainScene from './scenes/mainScene';
-import MainMenuScene from './scenes/mainMenuScene';
-import GameOverScene from './scenes/gameOverScene';
-import LeaderboardScene from './scenes/leaderboardScene';
-import InstructionsScene from './scenes/instructionsScene';
+import Partida from "./partida.js";
+
 const config = {
-type: Phaser.AUTO,
-width: window.innerWidth,
-height: window.innerHeight - 5,
-parent: 'divId',
-dom: {
-createContainer: true,
-},
-physics: {
-default: 'arcade',
-arcade: {
-gravity: { y: 300 },
-debug: false,
-},
-},
-scene: [
-MainMenuScene,
-MainScene,
-InstructionsScene,
-GameOverScene,
-LeaderboardScene,
-],
+    type: Phaser.WEBGL,
+    parent: 'Hidden-in-the-Dark',
+    width: 800,
+    height: 600,
+    scene: [
+        new Partida({ key: 'partida'})
+    ],
+    physics: {
+        default: "arcade",
+        arcade: {
+          gravity: { y: 0 },
+        },
+      },
 };
+
 const game = new Phaser.Game(config);
