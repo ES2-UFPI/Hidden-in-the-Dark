@@ -5,7 +5,7 @@ export default class Player {
         this.game = game;
         this.id = id;
         this.name = 'player_'+id;
-        this.caminho = './src/assets/players/player_'+id+'.png';
+        this.caminho = './assets/players/player_'+id+'.png';
         this.velocidade = velocidade;
         this.player = undefined;
         this.spawnCoord = spawnCoord;
@@ -21,7 +21,7 @@ export default class Player {
             frameHeight: 24,
         });
         this.game.load.audio('step', [
-            "./src/assets/sounds/step-sound.mp3"
+            "./assets/sounds/step-sound.mp3"
         ]);
     }
 

@@ -11,9 +11,9 @@ export default class Seeker extends Player {
     }   
 
     preload(){
-        this.game.load.image(this.name+'-hitbox', './src/assets/items/chest-zone.png');
+        this.game.load.image(this.name+'-hitbox', './assets/items/chest-zone.png');
         this.game.load.audio('hit', [
-            "./src/assets/sounds/hit-knife.mp3"
+            "./assets/sounds/hit-knife.mp3"
         ]);
         super.preload()
     }

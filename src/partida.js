@@ -26,18 +26,18 @@ export default class Partida extends Phaser.Scene
         //pre carregando os assets
         //fundo png de agua
         //templates de pixels para fazer o mapa
-        this.load.image("tiles", "./src/assets/map/assetsmap.png");
+        this.load.image("tiles", "./assets/map/assetsmap.png");
         //mapa do jogo feito a partir do template de pixels
-        this.load.tilemapTiledJSON("map", "./src/assets/map/map.json");
+        this.load.tilemapTiledJSON("map", "./assets/map/map.json");
         //visão do boneco
-        this.load.image("fogVision", "./src/assets/players/view-mask.png");
+        this.load.image("fogVision", "./assets/players/view-mask.png");
         //carregando a skin do jogador
         this.player.preload();
         this.playerPrincipal.preload();
         this.chests.forEach((c)=>{c.preload()});
 
         this.load.audio('theme', [
-            "./src/assets/sounds/musica_de_fundo.mp3"
+            "./assets/sounds/musica_de_fundo.mp3"
         ]);
     }
       

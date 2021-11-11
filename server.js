@@ -5,13 +5,15 @@ const app = express();
 const DIST_DIR = path.join(__dirname, '/dist');
 const HTML_FILE = path.join(DIST_DIR, 'index.html');
 
-app.use(express.static(DIST_DIR));
-app.get('*', (req, res) => {
-  res.sendFile(HTML_FILE);
-});
+app.use(express.static('src'));
+
+// app.get(function(req, res) {
+//   console.log(req.url)
+//   res.sendFile(path.join(__dirname, HTML_FILE));
+// });
 
 const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, () => {
-
+app.listen(PORT, (req, res) => {
+  console.log('app rodando')
 });

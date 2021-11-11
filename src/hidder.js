@@ -31,9 +31,9 @@ export default class Hidder extends Player {
 
     preload (){
         this.game.load.plugin('rexcircularprogressplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexcircularprogressplugin.min.js', true);  
-        this.game.load.image('red', './src/assets/particles/red.png');
+        this.game.load.image('red', './assets/particles/red.png');
         this.game.load.audio('opening_chests', [
-            "./src/assets/sounds/opening_chest.mp3"
+            "./assets/sounds/opening_chest.mp3"
         ]);
         super.preload();
     }
