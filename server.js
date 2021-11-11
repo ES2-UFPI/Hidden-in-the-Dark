@@ -15,6 +15,6 @@ app.use(express.static(GAME_DIR));
 
 const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, (req, res) => {
+app.listen(PORT, () => {
   console.log('Servidor Web Ligado')
 });

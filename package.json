@@ -1,12 +1,13 @@
 {
   "name": "hidden-in-the-dark",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.2.0",
+  "description": "Projeto Hidden in the Dark",
+  "main": "server.js",
+  "homepage": "https://es2-ufpi.github.io/Hidden-in-the-Dark/",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Nameless Group",
   "license": "ISC",
   "devDependencies": {
     "webpack": "^5.63.0",
