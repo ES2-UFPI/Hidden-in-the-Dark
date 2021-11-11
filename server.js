@@ -2,18 +2,19 @@ const path = require('path');
 const express = require('express');
 
 const app = express();
-const DIST_DIR = path.join(__dirname, '/dist');
-const HTML_FILE = path.join(DIST_DIR, 'index.html');
+const HTML_DIR = path.join(__dirname, '/view/html');
+const GAME_DIR = path.join(__dirname, '/view/game');
+// const HTML_FILE = 'index.html';
 
-app.use(express.static('src'));
+app.use(express.static(HTML_DIR));
+app.use(express.static(GAME_DIR));
 
-// app.get(function(req, res) {
-//   console.log(req.url)
-//   res.sendFile(path.join(__dirname, HTML_FILE));
+// app.get('/', function(req, res) {
+//   res.sendFile(path.join(HTML_DIR, HTML_FILE));
 // });
 
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, (req, res) => {
-  console.log('app rodando')
+  console.log('Servidor Web Ligado')
 });
