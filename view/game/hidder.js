@@ -9,8 +9,9 @@ import Player from "./player.js";
 
 export default class Hidder extends Player {
 
-    constructor(game, id, velocidade, spawnCoord){
-        super(game, id, velocidade,0.5, spawnCoord);
+    constructor(game, id, skin, spawnCoord){
+        console.log(game);
+        super(game, id, skin, 200 ,0.5, spawnCoord);
         this.lastChest = null;
         this.abrindo = false;
         this.alive = true;
@@ -38,9 +39,9 @@ export default class Hidder extends Player {
         super.preload();
     }
     
-    create(rt){
+    create(){
         super.create()
-        rt.depth = 40;
+        
     }
     
     update(button){

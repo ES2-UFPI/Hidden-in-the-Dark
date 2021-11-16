@@ -2,19 +2,24 @@ import Hidder from "./hidder.js";
 import Seeker from "./seeker.js";
 import Chest from "./chest.js";
 import { getChestLocation } from "./chest-spawn.js";
+
 export default class Partida extends Phaser.Scene
 {
     constructor ()
     {
+        
         super();
         this.keys = 0;
         var n = 12;//quant de baús
         var locations = getChestLocation();
         shuffle(locations);
 
-        this.player = new Hidder(this, 3, 200, {'x': 1834, 'y': 527});
-        this.playerPrincipal = new Seeker(this, 2, 200, {'x': 1734, 'y': 527});
+        this.players = [];
+        this.playerPrincipal = null;
         //this.player = new Seeker(this, 2, 250);
+
+
+        this.playeralatorio= new Hidder(this,  10, 2, {'x': 1634, 'y': 527});
 
         this.chests = [];
         for(var i = 0; i < n; i++){
@@ -32,18 +37,18 @@ export default class Partida extends Phaser.Scene
         //visão do boneco
         this.load.image("fogVision", "./assets/players/view-mask.png");
         //carregando a skin do jogador
-        this.player.preload();
-        this.playerPrincipal.preload();
+        // this.player.preload();
         this.chests.forEach((c)=>{c.preload()});
 
         this.load.audio('theme', [
             "./assets/sounds/musica_de_fundo.mp3"
         ]);
+        this.playeralatorio.preload()
     }
       
     create (){
         //mapa
-
+    
         //criando uma key para trabalhar com o map setado no preload
         const map = this.make.tilemap({ key: "map" });
         //tileset que indica as colisões do mapa
@@ -53,55 +58,52 @@ export default class Partida extends Phaser.Scene
         //adcionando o chao e suas colisoes
         const ground = map.createLayer("ground", tileset, 0, 0);
         //coisas que colidem com o personagem
-        const objectCollider = map.createLayer("objectCollider", tileset, 0, 0);
+        this.objectCollider = map.createLayer("objectCollider", tileset, 0, 0);
    
 
-        objectCollider.setCollisionByProperty({ collider: true });
+        this.objectCollider.setCollisionByProperty({ collider: true });
         
         // fazendo a fog
-        //pegando o tamanho da tela do jogo
-        const width = this.scale.width;
-        const height = this.scale.height;
+        // pegando o tamanho da tela do jogo
+        // const width = this.scale.width;
+        // const height = this.scale.height;
 
         // fazendo uma textura do tamanho do mapa 
-        const rt = this.make.renderTexture({
+        this.rt = this.make.renderTexture({
             width:4928,
             height:6378
         }, true);
         // preenchedo a textura com preto
-        rt.fill(0x000000, 1);
+        this.rt.fill(0x000000, 1);
         // colocando a textura por cima do chao
-        rt.draw(ground);
+        this.rt.draw(ground);
         // setando o preto pra ficar azulado
-        rt.setTint(0x121212); //050505
+        this.rt.setTint(0x121212); //050505
+
+        this.playeralatorio.create()
 
         //criacao das animacoes do player
-        this.player.create(rt);
-        this.playerPrincipal.create(rt);
-        this.physics.add.collider(this.player.player, objectCollider);
-        this.physics.add.collider(this.playerPrincipal.player, objectCollider);
+        // this.player.create(rt);
+        // this.physics.add.collider(this.player.player, objectCollider);
 
         //interação player e chest
         this.chests.forEach((c)=>{c.create()});
         
         //adiciona colisões
-        this.player.interactions(this.chests, [this.player]);
-        this.playerPrincipal.interactions(this.chests, [this.player]);
+        // this.player.interactions(this.chests, this.player);
         
         //fazer a camera seguir o personagem
-        const camera = this.cameras.main.setZoom(2);
-        camera.startFollow(this.playerPrincipal.player);
+        this.camera = this.cameras.main.setZoom(2);
 
         //define limites de alcançe da câmera
-        camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+        this.camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
         this.keysText = this.add.text(210, 155, 'keys: '+this.keys, { fontSize: '20px', fill: '#FFFFFF' });
         this.keysText.depth = 50;
         this.keysText.setScrollFactor(0, 0);
 
         
-        rt.mask = new Phaser.Display.Masks.BitmapMask(this, this.playerPrincipal.vision);
-        rt.mask.invertAlpha = true;
+        
 
         //som
         var background_music = this.sound.add('theme');
@@ -115,19 +117,61 @@ export default class Partida extends Phaser.Scene
             delay:0
         };
         background_music.play(background_music_config);
+
+
+        this.socket = io();
+        this.socket.on('currentPlayers', (players)=>(this.createPlayers(players, this)));
+        this.socket.on('newPlayer', (player)=>(this.createPlayer(player, this)));
     }
 
 
     update(){ 
         var button = this.input.keyboard.createCursorKeys();
         //this.player.update(button);
-        this.playerPrincipal.update(button);
+        if (this.playerPrincipal != null) this.playerPrincipal.update(button);
 
     }
 
     addKey(){
         this.keys += 1;
         this.keysText.setText('keys: '+this.keys);
+    }
+
+    createPlayer(id, data, game){
+        if (game == undefined) return;
+        if (game.socket == undefined) return;
+        if (id == game.socket.id) {//player principal
+            if (game.playerPrincipal != null) return;//player principal ja foi instanciado
+            //console.log('achou')
+            game.playerPrincipal = new Hidder(game,  id, 2, {'x': 1734, 'y': 527});
+            game.playerPrincipal.preload();
+            game.playerPrincipal.create();
+            game.physics.add.collider(game.playerPrincipal.player, game.objectCollider);
+            game.playerPrincipal.interactions(game.chests, game.players);
+            game.camera.startFollow(game.playerPrincipal.player); 
+            game.rt.mask = new Phaser.Display.Masks.BitmapMask(game, game.playerPrincipal.vision);
+            game.rt.mask.invertAlpha = true;
+            game.rt.depth = 40;
+        }
+        else {//outro player
+            if (this.getPlayerExists(game, id)) return;//player ja foi instanciado
+            var p = new Seeker(game, id, 2, {'x': 1734, 'y': 527});
+            p.preload();
+            p.create();
+            game.players.push(p);
+        }
+    }
+
+    createPlayers(players, game){
+        for (var id in players){
+            //console.log(players[id].playerId + ' | ' + game.socket.id);
+            this.createPlayer(id, players[id], game);
+        }
+    }
+
+    getPlayerExists(game, id){
+        for (var p in game.players) if (p.id == id) return true;
+        return false;
     }
     
 }

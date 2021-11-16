@@ -1,11 +1,13 @@
 
+
+
 export default class Player {
 
-    constructor(game, id, velocidade,visao, spawnCoord){
+    constructor(game, id, skin, velocidade, visao, spawnCoord){
         this.game = game;
         this.id = id;
         this.name = 'player_'+id;
-        this.caminho = './assets/players/player_'+id+'.png';
+        this.caminho = './assets/players/player_'+skin+'.png';
         this.velocidade = velocidade;
         this.player = undefined;
         this.spawnCoord = spawnCoord;
@@ -16,6 +18,7 @@ export default class Player {
     }
 
     preload() {
+        //console.log(this.caminho);
         this.game.load.spritesheet(this.name, this.caminho, {
             frameWidth: 16,
             frameHeight: 24,
@@ -26,9 +29,10 @@ export default class Player {
     }
 
     create (){
-
+        //console.log(this.game)
         this.player = this.game.physics.add.sprite(this.spawnCoord['x'], this.spawnCoord['y'], this.name);
         //this.player.setCollideWorldBounds(true);
+        //console.log(this.player)
         this.player.depth = 0;
         
 
@@ -58,6 +62,7 @@ export default class Player {
             frameRate: 10,
             repeat: -1,
         });
+        console.log(this.player)
 
         this.player.anims.play("idleRight", true);
 
@@ -76,7 +81,7 @@ export default class Player {
 
     update(button){
         this.prevVelocity = this.player.body.velocity.clone();
-        this.prevDir = this.player.anims.currentAnim.key.toString()[0];
+        this.prevDir = this.getLastDirection();
         
         //para um player quando ele deixa de apertar um botao de movimento
         this.player.body.setVelocity(0);
@@ -150,9 +155,15 @@ export default class Player {
                 if (this.prevDir == 'l') this.player.anims.play("idleLeft", true);
                 else this.player.anims.play("idleRight", true);
             
+
             if (this.prevDir == 'l') this.player.anims.play("idleLeft", true);
             else this.player.anims.play("idleRight", true);
         }
+    }
+
+    getLastDirection(){ //returns 'l' or 'r'
+        if (this.player.anims.currentAnim.key.toString() == 'idleLeft' || this.player.anims.currentAnim.key.toString() == 'walkLeft') return 'l';
+        else return 'r';
     }
 
     interactions (chests){

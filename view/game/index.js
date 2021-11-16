@@ -16,4 +16,6 @@ const config = {
       },
 };
 
+var socket = io();
+
 const game = new Phaser.Game(config);
