@@ -1,6 +1,7 @@
 import Hidder from "./hidder.js";
 import Seeker from "./seeker.js";
 import Chest from "./chest.js";
+import Skins from "./skins.js";
 import { getChestLocation } from "./chest-spawn.js";
 
 export default class Partida extends Phaser.Scene
@@ -20,7 +21,7 @@ export default class Partida extends Phaser.Scene
 
 
         this.playeralatorio= new Hidder(this,  10, 2, {'x': 1634, 'y': 527});
-
+        this.skins = new Skins(this);
         this.chests = [];
         for(var i = 0; i < n; i++){
             this.chests.push(new Chest(this, i, locations[i]));
@@ -121,7 +122,8 @@ export default class Partida extends Phaser.Scene
 
         this.socket = io();
         this.socket.on('currentPlayers', (players)=>(this.createPlayers(players, this)));
-        this.socket.on('newPlayer', (player)=>(this.createPlayer(player, this)));
+        this.socket.on('newPlayer', (player)=>(this.createPlayer(player.playerId, player, this)));
+        this.socket.on('playerMoved', (player)=>(this.updatePlayer(player.playerId, player, this)));
     }
 
 
@@ -166,6 +168,13 @@ export default class Partida extends Phaser.Scene
         for (var id in players){
             //console.log(players[id].playerId + ' | ' + game.socket.id);
             this.createPlayer(id, players[id], game);
+        }
+    }
+
+    updatePlayer(id, data, game){
+        for (var indice in game.players){
+            if (game.players[indice].id == id)
+                game.players[indice].updatePlayer(data);
         }
     }
 

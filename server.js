@@ -16,7 +16,7 @@ app.use(express.static(GAME_DIR));
 io.on('connection', function(socket){
   console.log('Um usuario se conectou: ' + socket.id);
   players[socket.id] = {
-    dir: 'r',
+    anim: 'idleLeft',
     x: 1834,
     y: 527,
     playerId: socket.id,
@@ -25,12 +25,22 @@ io.on('connection', function(socket){
   socket.emit('currentPlayers', players);
   socket.broadcast.emit('newPlayer', players[socket.id]);
 
+  socket.on('playerMovement', function (movementData) {
+    players[socket.id].x = movementData.x;
+    players[socket.id].y = movementData.y;
+    players[socket.id].anim = movementData.anim;
+    // emit a message to all players about the player that moved
+    socket.broadcast.emit('playerMoved', players[socket.id]);
+  });
+
   socket.on('disconnect', function(){
     console.log('O usuario se desconectou');
     delete players[socket.id];
     io.emit('disconectado', socket.id);
   })
 })
+
+
 
 const PORT = process.env.PORT || 8080;
 

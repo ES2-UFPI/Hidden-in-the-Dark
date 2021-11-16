@@ -1,13 +1,11 @@
 
-
-
 export default class Player {
 
     constructor(game, id, skin, velocidade, visao, spawnCoord){
         this.game = game;
         this.id = id;
-        this.name = 'player_'+id;
-        this.caminho = './assets/players/player_'+skin+'.png';
+        this.name = 'player_'+this.id;
+        this.skin = skin;
         this.velocidade = velocidade;
         this.player = undefined;
         this.spawnCoord = spawnCoord;
@@ -19,10 +17,7 @@ export default class Player {
 
     preload() {
         //console.log(this.caminho);
-        this.game.load.spritesheet(this.name, this.caminho, {
-            frameWidth: 16,
-            frameHeight: 24,
-        });
+        this.game.skins.iniciarSkin(this.skin);
         this.game.load.audio('step', [
             "./assets/sounds/step-sound.mp3"
         ]);
@@ -30,41 +25,16 @@ export default class Player {
 
     create (){
         //console.log(this.game)
-        this.player = this.game.physics.add.sprite(this.spawnCoord['x'], this.spawnCoord['y'], this.name);
+        this.player = this.game.physics.add.sprite(this.spawnCoord['x'], this.spawnCoord['y'], 'player_'+this.skin);
         //this.player.setCollideWorldBounds(true);
         //console.log(this.player)
         this.player.depth = 0;
         
-
-        const anims = this.game.anims;
-        anims.create({
-            key: "walkLeft",
-            frames: anims.generateFrameNames(this.name, { start: 19, end: 16 }),
-            frameRate: 10,
-            repeat: -1,
-        });
-        anims.create({
-            key: "walkRight",
-            frames: anims.generateFrameNames(this.name, { start: 12, end: 15 }),
-            frameRate: 10,
-            repeat: -1,
-        });
-
-        anims.create({
-            key: "idleLeft",
-            frames: anims.generateFrameNames(this.name, { start: 8, end: 11 }),
-            frameRate: 10,
-            repeat: -1,
-        });
-        anims.create({
-            key: "idleRight",
-            frames: anims.generateFrameNames(this.name, { start: 4, end: 7 }),
-            frameRate: 10,
-            repeat: -1,
-        });
+        this.game.skins.iniciarAnims(this.skin);
+        
         console.log(this.player)
 
-        this.player.anims.play("idleRight", true);
+        this.player.anims.play("idleRight_"+this.skin, true);
 
         //fazer o campo de visao do personagem
         this.vision = this.game.make.image({
@@ -77,9 +47,15 @@ export default class Player {
         this.vision.scale = this.camp_vision;//seeker 0.3 hidder 0.5
 
         this.step = null;
+        
     }
 
     update(button){
+        // if (this.game.PlayerPrincipal != null || !(this.id == this.game.PlayerPrincipal.id)){//personagem controlado pelo sv
+        //     return
+        // }
+        //personagem controlado pelo player
+        if (!this.game.skins.getAnimStarted(this.skin))return;
         this.prevVelocity = this.player.body.velocity.clone();
         this.prevDir = this.getLastDirection();
         
@@ -135,30 +111,39 @@ export default class Player {
         }
         //fazer a animacao de movimento do boneco correspondente ao botao pressionado
         if (button.left.isDown) {
-            this.player.anims.play("walkLeft", true);
+            this.player.anims.play("walkLeft_"+this.skin, true);
         } else if (button.right.isDown) {
-            this.player.anims.play("walkRight", true);
+            this.player.anims.play("walkRight_"+this.skin, true);
         } else if (button.up.isDown) {
-            if (this.prevDir == 'l') this.player.anims.play("walkLeft", true);
-            else this.player.anims.play("walkRight", true);
+            if (this.prevDir == 'l') this.player.anims.play("walkLeft_"+this.skin, true);
+            else this.player.anims.play("walkRight_"+this.skin, true);
         } else if (button.down.isDown) {
-            if (this.prevDir == 'l') this.player.anims.play("walkLeft", true);
-            else this.player.anims.play("walkRight", true);
+            if (this.prevDir == 'l') this.player.anims.play("walkLeft_"+this.skin, true);
+            else this.player.anims.play("walkRight_"+this.skin, true);
         } else {
             //fazer o boneco voltar a sua animacao de parado depois de parar de andar
-            if (this.prevVelocity.x < 0) this.player.anims.play("idleLeft", true);
-            else if (this.prevVelocity.x > 0) this.player.anims.play("idleRight", true);
+            if (this.prevVelocity.x < 0) this.player.anims.play("idleLeft_"+this.skin, true);
+            else if (this.prevVelocity.x > 0) this.player.anims.play("idleRight_"+this.skin, true);
             else if (this.prevVelocity.y < 0) 
-                if (this.prevDir == 'l') this.player.anims.play("idleLeft", true);
-                else this.player.anims.play("idleRight", true);
+                if (this.prevDir == 'l') this.player.anims.play("idleLeft_"+this.skin, true);
+                else this.player.anims.play("idleRight_"+this.skin, true);
             else if (this.prevVelocity.y > 0) 
-                if (this.prevDir == 'l') this.player.anims.play("idleLeft", true);
-                else this.player.anims.play("idleRight", true);
+                if (this.prevDir == 'l') this.player.anims.play("idleLeft_"+this.skin, true);
+                else this.player.anims.play("idleRight_"+this.skin, true);
             
 
-            if (this.prevDir == 'l') this.player.anims.play("idleLeft", true);
-            else this.player.anims.play("idleRight", true);
+            if (this.prevDir == 'l') this.player.anims.play("idleLeft_"+this.skin, true);
+            else this.player.anims.play("idleRight_"+this.skin, true);
         }
+
+        //if (this.player.anims.currentAnim.key.toString()[0]=='w'){
+        this.game.socket.emit('playerMovement', { x: this.player.x, y: this.player.y, anim: this.player.anims.currentAnim.key.toString()});
+        //}
+    }
+
+    updatePlayer(data){
+        this.player.anims.play(data.anim, true);
+        this.player.setPosition(data.x, data.y);
     }
 
     getLastDirection(){ //returns 'l' or 'r'

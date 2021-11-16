@@ -47,8 +47,8 @@ export default class Hidder extends Player {
     update(button){
         if(button.space.isDown){//apertando espaço
             if (this.abrindo){//abrindo baú
-                if (this.prevDir == 'l') this.player.anims.play("idleLeft", true);
-                else this.player.anims.play("idleRight", true);
+                if (this.prevDir == 'l') this.player.anims.play("idleLeft_"+this.skin, true);
+                else this.player.anims.play("idleRight_"+this.skin, true);
                 this.player.body.setVelocity(0);
                 return;
             }
