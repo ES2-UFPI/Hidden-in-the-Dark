@@ -10,7 +10,6 @@ import Player from "./player.js";
 export default class Hidder extends Player {
 
     constructor(game, id, skin, spawnCoord){
-        console.log(game);
         super(game, id, skin, 200 ,0.5, spawnCoord);
         this.lastChest = null;
         this.abrindo = false;

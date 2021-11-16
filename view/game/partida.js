@@ -125,10 +125,15 @@ export default class Partida extends Phaser.Scene
 
 
         this.socket = io();
+
         this.socket.on('currentPlayers', (players)=>(this.createPlayers(players, this)));
         this.socket.on('newPlayer', (player)=>(this.createPlayer(player.playerId, player, this)));
         this.socket.on('playerMoved', (player)=>(this.updatePlayer(player.playerId, player, this)));
         this.socket.on('disconectado', (id)=>(this.deletePlayer(id, this)));
+
+        this.socket.emit('playerLogin', {partida: 0, name: 'jose'});//id da partida que está entrando
+
+        
     }
 
 
@@ -147,8 +152,10 @@ export default class Partida extends Phaser.Scene
     createPlayer(id, data, game){
         if (game == undefined) return;
         if (game.socket == undefined) return;
-        if (id == game.socket.id) {//player principal
+        if (id == game.socket.id) {//player principal é carregado
             if (game.playerPrincipal != null) return;//player principal ja foi instanciado
+            // console.log('criando player principal')
+            // console.log(data)
             //console.log('achou')
             game.playerPrincipal = new Hidder(game,  id, 2, {'x': data.x, 'y': data.y});
             game.playerPrincipal.preload();
@@ -170,9 +177,9 @@ export default class Partida extends Phaser.Scene
     }
 
     createPlayers(players, game){
-        for (var id in players){
-            //console.log(players[id].playerId + ' | ' + game.socket.id);
-            this.createPlayer(id, players[id], game);
+        for (var indice in players){
+            if (players[indice] == null) continue;
+            this.createPlayer(players[indice].playerId, players[indice], game)
         }
     }
 
@@ -200,8 +207,8 @@ export default class Partida extends Phaser.Scene
     }
 
     deletePlayer(id, game){
-        console.log(id)
         var player = this.getPlayerById(game,id)
+        if (player == null) return;
         player.destroy()
         delete game.players[player]
     }

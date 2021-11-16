@@ -12,17 +12,13 @@ export default class Skins{
     }
 
     iniciarAnims(id){
-        console.log(id)
         var skin = this.getSkinById(id);
         if (skin == null) {
-            console.log('skin null');
             return;
         }
         if (this.getAnimStarted(id)) {
-            console.log('skin ja iniciada');
             return;
         }
-        console.log(id)
         skin.anims_started = true;
         
         const anims = this.game.anims;
@@ -52,8 +48,7 @@ export default class Skins{
             repeat: -1,
         });
 
-        
-        console.log('skin iniciada agora');
+
 
     }
 

@@ -76,7 +76,6 @@ export default class Seeker extends Player {
             this.cooldown = true;
             
             if (this.lastHidder!=null && this.game.physics.overlap(this.hitbox, this.lastHidder.player)){//hidder na área
-                console.log(this.game.physics.overlap(this.hitbox, this.lastHidder.player));
                 this.kill();
             }
         }

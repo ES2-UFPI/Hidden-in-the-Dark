@@ -16,7 +16,6 @@ export default class Player {
     }
 
     preload() {
-        //console.log(this.caminho);
         this.game.skins.iniciarSkin(this.skin);
         this.game.load.audio('step', [
             "./assets/sounds/step-sound.mp3"
@@ -24,15 +23,11 @@ export default class Player {
     }
 
     create (){
-        //console.log(this.game)
         this.player = this.game.physics.add.sprite(this.spawnCoord['x'], this.spawnCoord['y'], 'player_'+this.skin);
         //this.player.setCollideWorldBounds(true);
-        //console.log(this.player)
         this.player.depth = 0;
         
         this.game.skins.iniciarAnims(this.skin);
-        
-        console.log(this.player)
 
         this.player.anims.play("idleRight_"+this.skin, true);
 
