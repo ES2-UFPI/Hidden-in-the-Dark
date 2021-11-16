@@ -20,7 +20,9 @@ export default class Partida extends Phaser.Scene
         //this.player = new Seeker(this, 2, 250);
 
 
-        this.playeralatorio= new Hidder(this,  10, 2, {'x': 1634, 'y': 527});
+        this.playeralatorio= new Hidder(this,  10, 3, {'x': 0, 'y': 0});
+        this.playeralatorio2= new Hidder(this,  11, 2, {'x': 0, 'y': 0});
+
         this.skins = new Skins(this);
         this.chests = [];
         for(var i = 0; i < n; i++){
@@ -45,6 +47,7 @@ export default class Partida extends Phaser.Scene
             "./assets/sounds/musica_de_fundo.mp3"
         ]);
         this.playeralatorio.preload()
+        this.playeralatorio2.preload()
     }
       
     create (){
@@ -82,6 +85,7 @@ export default class Partida extends Phaser.Scene
         this.rt.setTint(0x121212); //050505
 
         this.playeralatorio.create()
+        this.playeralatorio2.create()
 
         //criacao das animacoes do player
         // this.player.create(rt);
@@ -157,7 +161,7 @@ export default class Partida extends Phaser.Scene
         }
         else {//outro player
             if (this.getPlayerExists(game, id)) return;//player ja foi instanciado
-            var p = new Seeker(game, id, 2, {'x': 1734, 'y': 527});
+            var p = new Seeker(game, id, 3, {'x': 1734, 'y': 527});
             p.preload();
             p.create();
             game.players.push(p);
