@@ -14,7 +14,7 @@ app.use(express.static(HTML_DIR));
 app.use(express.static(GAME_DIR));
 
 io.on('connection', function(socket){
-  console.log('Um usuario se conectou: ' + socket.id);
+  console.log(socket);
   players[socket.id] = {
     anim: 'idleLeft',
     x: 1834,

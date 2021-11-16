@@ -128,6 +128,7 @@ export default class Partida extends Phaser.Scene
         this.socket.on('currentPlayers', (players)=>(this.createPlayers(players, this)));
         this.socket.on('newPlayer', (player)=>(this.createPlayer(player.playerId, player, this)));
         this.socket.on('playerMoved', (player)=>(this.updatePlayer(player.playerId, player, this)));
+        this.socket.on('disconectado', (id)=>(this.deletePlayer(id, this)));
     }
 
 
@@ -149,7 +150,7 @@ export default class Partida extends Phaser.Scene
         if (id == game.socket.id) {//player principal
             if (game.playerPrincipal != null) return;//player principal ja foi instanciado
             //console.log('achou')
-            game.playerPrincipal = new Hidder(game,  id, 2, {'x': 1734, 'y': 527});
+            game.playerPrincipal = new Hidder(game,  id, 2, {'x': data.x, 'y': data.y});
             game.playerPrincipal.preload();
             game.playerPrincipal.create();
             game.physics.add.collider(game.playerPrincipal.player, game.objectCollider);
@@ -161,7 +162,7 @@ export default class Partida extends Phaser.Scene
         }
         else {//outro player
             if (this.getPlayerExists(game, id)) return;//player ja foi instanciado
-            var p = new Seeker(game, id, 3, {'x': 1734, 'y': 527});
+            var p = new Seeker(game, id, 3, {'x': data.x, 'y': data.y});
             p.preload();
             p.create();
             game.players.push(p);
@@ -183,10 +184,28 @@ export default class Partida extends Phaser.Scene
     }
 
     getPlayerExists(game, id){
-        for (var p in game.players) if (p.id == id) return true;
+        for (var indice in game.players){
+            if (game.players[indice].id == id)
+                return true;
+        }
         return false;
     }
     
+    getPlayerById(game, id){
+        for (var indice in game.players){
+            if (game.players[indice].id == id)
+                return game.players[indice];
+        }
+        return null;
+    }
+
+    deletePlayer(id, game){
+        console.log(id)
+        var player = this.getPlayerById(game,id)
+        player.destroy()
+        delete game.players[player]
+    }
+
 }
 function shuffle(array) {
     let currentIndex = array.length,  randomIndex;

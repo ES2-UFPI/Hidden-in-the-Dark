@@ -86,4 +86,9 @@ export default class Seeker extends Player {
         this.lastHidder.die();
 
     }
+
+    destroy(){
+        super.destroy()
+        this.hitbox.destroy()
+    }
 }

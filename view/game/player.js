@@ -156,4 +156,8 @@ export default class Player {
             this.game.physics.add.collider(this.player, c.chest);
         }); 
     }
+
+    destroy(){
+        this.player.destroy()
+    }
 }
