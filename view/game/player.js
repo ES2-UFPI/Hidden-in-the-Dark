@@ -142,7 +142,7 @@ export default class Player {
     }
 
     getLastDirection(){ //returns 'l' or 'r'
-        if (this.player.anims.currentAnim.key.toString() == 'idleLeft' || this.player.anims.currentAnim.key.toString() == 'walkLeft') return 'l';
+        if (this.player.anims.currentAnim.key.toString().split('_')[0] == 'idleLeft' || this.player.anims.currentAnim.key.toString().split('_')[0] == 'walkLeft') return 'l';//fixme!! tem que retirar o id do nome da anim
         else return 'r';
     }
 
