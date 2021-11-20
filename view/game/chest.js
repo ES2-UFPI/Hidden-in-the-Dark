@@ -7,25 +7,24 @@ export default class Chest {
         this.id = id;
         this.coord = coord;
         this.caminho = './assets/items/chest.png';
-        this.name = 'chest-'+this.id;
+        this.name = 'chest';
         this.is_open = false;
     }
 
     preload() {
-        this.game.load.image(this.name+'-zone', './assets/items/chest-zone.png');
+        // this.game.load.image(this.name+'-zone', './assets/items/chest-zone.png');
 
-        this.game.load.spritesheet(this.name, this.caminho, {
-            frameWidth: 15,
-            frameHeight: 18,
-        });
+        // this.game.load.spritesheet(this.name, this.caminho, {
+        //     frameWidth: 15,
+        //     frameHeight: 18,
+        // });
 
-        this.game.load.audio('chest_open', [
-            "./assets/sounds/chest-sound-2.mp3"
-        ]);
+        // this.game.load.audio('chest_open', [
+        //     "./assets/sounds/chest-sound-2.mp3"
+        // ]);
     }
 
     create (){
-
         this.chest = this.game.physics.add.staticSprite(this.coord['x'], this.coord['y'], this.name);
         this.zone = this.game.physics.add.staticImage(this.coord['x'], this.coord['y'], this.name+'-zone');
         this.chest.depth = 20;
@@ -56,10 +55,10 @@ export default class Chest {
 
     open(){
         if(this.is_open == false){
+            this.socket.emit('chestOpen', this.id);
             this.chest.anims.play('open', true);
             this.is_open = true;
             this.game.addKey();
-
             var chest_open = this.game.sound.add('chest_open');
             var chest_open_config={
             mute:false,
