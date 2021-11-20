@@ -9,8 +9,8 @@ import Player from "./player.js";
 
 export default class Hidder extends Player {
 
-    constructor(game, id, velocidade, spawnCoord){
-        super(game, id, velocidade,0.5, spawnCoord);
+    constructor(game, id, skin, spawnCoord){
+        super(game, id, skin, 200 ,0.5, spawnCoord);
         this.lastChest = null;
         this.abrindo = false;
         this.alive = true;
@@ -38,20 +38,24 @@ export default class Hidder extends Player {
         super.preload();
     }
     
-    create(rt){
+    create(){
         super.create()
-        rt.depth = 40;
+        
     }
     
     update(button){
         if(button.space.isDown){//apertando espaço
             if (this.abrindo){//abrindo baú
-                if (this.prevDir == 'l') this.player.anims.play("idleLeft", true);
-                else this.player.anims.play("idleRight", true);
+                if (this.prevDir == 'l') this.player.anims.play("idleLeft_"+this.skin, true);
+                else this.player.anims.play("idleRight_"+this.skin, true);
                 this.player.body.setVelocity(0);
                 return;
             }
             if (this.lastChest != null && this.game.physics.overlap(this.player, this.lastChest.zone) && !this.abrindo && !this.lastChest.is_open) {
+                if(this.step != null){
+                    this.step.destroy();
+                    this.step=null;
+                }
                 this.opening_chests = this.game.sound.add('opening_chests');
                 this.opening_chests.play({
                     mute:false,

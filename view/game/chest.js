@@ -32,7 +32,10 @@ export default class Chest {
         //this.zone.setScale(1.5).update();
 
         this.zone.setVisible(false);
-
+        this.zone.setSize(30,35)
+        //se quiser ver o range real do bau descomente essa função abaixo
+        //this.zone.setDisplaySize(30,35)
+        
         const anims = this.game.anims;
 
         anims.create({
