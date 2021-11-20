@@ -3,13 +3,15 @@ import Seeker from "./seeker.js";
 import Chest from "./chest.js";
 import Skins from "./skins.js";
 import { getChestLocation } from "./chest-spawn.js";
+import { CST } from "../CST.js"
 
 export default class Partida extends Phaser.Scene
 {
     constructor ()
     {
-        
-        super();
+        super({
+            key: CST.SCENES.PARTIDA
+        });
         this.keys = 0;
         var n = 12;//quant de baús
         var locations = getChestLocation();
