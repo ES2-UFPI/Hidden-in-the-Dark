@@ -121,11 +121,11 @@ export default class Partida extends Phaser.Scene
         this.socket.on('currentPlayers', (players)=>(this.createPlayers(players, this)));
         this.socket.on('newPlayer', (player)=>(this.createPlayer(player.playerId, player, this)));
         this.socket.on('playerMoved', (player)=>(this.updatePlayer(player.playerId, player, this)));
-        this.socket.on('chestOpen', (chest)=>(this.chestOpen(chest, this)));
         this.socket.on('chests', (chests)=>(this.initChests(chests, this)));
+        this.socket.on('openChest', (id)=>(this.openChest(id, this)));
         this.socket.on('desconectado', (id)=>(this.deletePlayer(id, this)));
         this.socket.emit('playerLogin', {partida: 0, name: 'jose'});//id da partida que está entrando
-        
+
     }
 
     update(){ 
@@ -183,7 +183,7 @@ export default class Partida extends Phaser.Scene
         for(var i = 0; i < chests.length; i++){
             game.chests.push(new Chest(game, i, {x: chests[i].x, y: chests[i].y}));
         }
-        console.log(game.chests);
+        //console.log(game.chests);
         this.chests.forEach((c)=>{c.preload()});
         this.chests.forEach((c)=>{c.create()});
     }
