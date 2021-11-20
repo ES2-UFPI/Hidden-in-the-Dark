@@ -142,7 +142,7 @@ export default class Partida extends Phaser.Scene
         if (game.socket == undefined) return;
         if (id == game.socket.id) {//player principal é carregado
             if (game.playerPrincipal != null) return;//player principal ja foi instanciado
-            game.playerPrincipal = new Hidder(game,  id, 2, {'x': data.x, 'y': data.y});
+            game.playerPrincipal = new Hidder(game,  id, 2, {'x': data.x, 'y': data.y},data.name);
             game.playerPrincipal.preload();
             game.playerPrincipal.create();
             game.physics.add.collider(game.playerPrincipal.player, game.objectCollider);
@@ -154,7 +154,7 @@ export default class Partida extends Phaser.Scene
         }
         else {//outro player
             if (this.getPlayerExists(game, id)) return;//player ja foi instanciado
-            var p = new Seeker(game, id, 3, {'x': data.x, 'y': data.y});
+            var p = new Seeker(game, id, 3, {'x': data.x, 'y': data.y},data.name);
             p.preload();
             p.create();
             game.players.push(p);

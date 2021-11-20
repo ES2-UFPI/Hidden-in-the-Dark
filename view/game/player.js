@@ -1,7 +1,7 @@
 
 export default class Player {
 
-    constructor(game, id, skin, velocidade, visao, spawnCoord){
+    constructor(game, id, skin, velocidade, visao, spawnCoord, name){
         this.game = game;
         this.id = id;
         this.name = 'player_'+this.id;
@@ -13,6 +13,7 @@ export default class Player {
         this.prevVelocity = undefined;
         this.prevDir = 'l';
         this.camp_vision = visao;
+        this.playerName = name;
     }
 
     preload() {
@@ -43,12 +44,17 @@ export default class Player {
 
         this.step = null;
         
+        //fontFamily:  
+        this.nameText = this.game.add.text(0, 0, this.playerName, { fontSize: '12px', fill: '#FFFFFF' });
+        this.nameText.depth = 21;
+        // this.nameText.setScrollFactor(0, 0);
     }
 
     update(button){
         // if (this.game.PlayerPrincipal != null || !(this.id == this.game.PlayerPrincipal.id)){//personagem controlado pelo sv
         //     return
         // }
+        
         //personagem controlado pelo player
         if (!this.game.skins.getAnimStarted(this.skin))return;
         this.prevVelocity = this.player.body.velocity.clone();
@@ -137,6 +143,7 @@ export default class Player {
     }
 
     updatePlayer(data){
+        this.nameText.setPosition(this.player.x - (this.playerName.length * 4) , this.player.y - 25);
         this.player.anims.play(data.anim, true);
         this.player.setPosition(data.x, data.y);
     }
