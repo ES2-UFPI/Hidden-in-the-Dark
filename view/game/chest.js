@@ -12,16 +12,16 @@ export default class Chest {
     }
 
     preload() {
-        // this.game.load.image(this.name+'-zone', './assets/items/chest-zone.png');
+        this.game.load.image(this.name+'-zone', './assets/items/chest-zone.png');
 
-        // this.game.load.spritesheet(this.name, this.caminho, {
-        //     frameWidth: 15,
-        //     frameHeight: 18,
-        // });
+        this.game.load.spritesheet(this.name, this.caminho, {
+            frameWidth: 15,
+            frameHeight: 18,
+        });
 
-        // this.game.load.audio('chest_open', [
-        //     "./assets/sounds/chest-sound-2.mp3"
-        // ]);
+        this.game.load.audio('chest_open', [
+            "./assets/sounds/chest-sound-2.mp3"
+        ]);
     }
 
     create (){
@@ -55,7 +55,7 @@ export default class Chest {
 
     open(){
         if(this.is_open == false){
-            this.socket.emit('chestOpen', this.id);
+            this.game.socket.emit('chestOpen', this.id);
             this.chest.anims.play('open', true);
             this.is_open = true;
             this.game.addKey();

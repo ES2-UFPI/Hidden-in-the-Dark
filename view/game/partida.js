@@ -184,7 +184,7 @@ export default class Partida extends Phaser.Scene
             game.chests.push(new Chest(game, i, {x: chests[i].x, y: chests[i].y}));
         }
         console.log(game.chests);
-        //this.chests.forEach((c)=>{c.preload()});
+        this.chests.forEach((c)=>{c.preload()});
         this.chests.forEach((c)=>{c.create()});
     }
 
