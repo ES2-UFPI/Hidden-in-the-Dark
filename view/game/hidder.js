@@ -52,6 +52,10 @@ export default class Hidder extends Player {
                 return;
             }
             if (this.lastChest != null && this.game.physics.overlap(this.player, this.lastChest.zone) && !this.abrindo && !this.lastChest.is_open) {
+                if(this.step != null){
+                    this.step.destroy();
+                    this.step=null;
+                }
                 this.opening_chests = this.game.sound.add('opening_chests');
                 this.opening_chests.play({
                     mute:false,
