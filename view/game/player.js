@@ -1,8 +1,6 @@
 const STEP_SOUND_DISTANCE = 600;
 
-
 export default class Player {
-
     constructor(game, id, skin, velocidade, visao, spawnCoord, name){
         this.game = game;
         this.id = id;
@@ -151,7 +149,6 @@ export default class Player {
 
         var distancia = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.game.playerPrincipal.player.x, this.game.playerPrincipal.player.y)
         var volume = (distancia > STEP_SOUND_DISTANCE)? 0 : 1-distancia/STEP_SOUND_DISTANCE ;
-        console.log(volume)
         if(this.player.anims.currentAnim.key[0] == 'w'){
             if (this.step == null){
                 this.step = this.game.sound.add('step');
@@ -188,5 +185,8 @@ export default class Player {
 
     destroy(){
         this.player.destroy()
+        this.step.destroy();
+        this.step=null;
+        this.nameText.destroy;
     }
 }
