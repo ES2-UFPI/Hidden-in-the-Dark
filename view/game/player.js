@@ -1,3 +1,5 @@
+const STEP_SOUND_DISTANCE = 600;
+
 
 export default class Player {
 
@@ -146,6 +148,31 @@ export default class Player {
         this.nameText.setPosition(this.player.x - (this.playerName.length * 4) , this.player.y - 25);
         this.player.anims.play(data.anim, true);
         this.player.setPosition(data.x, data.y);
+
+        var distancia = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.game.playerPrincipal.player.x, this.game.playerPrincipal.player.y)
+        var volume = (distancia > STEP_SOUND_DISTANCE)? 0 : 1-distancia/STEP_SOUND_DISTANCE ;
+        console.log(volume)
+        if(this.player.anims.currentAnim.key[0] == 'w'){
+            if (this.step == null){
+                this.step = this.game.sound.add('step');
+                this.step.play({
+                    mute:false,
+                    loop:true, 
+                    volume:volume,
+                    rate:1,
+                    detune:0,
+                    seek:0,
+                    delay:0
+                });
+            }
+            else {
+                this.step.setVolume(volume);
+            }
+        }
+        if(this.step != null && (this.player.anims.currentAnim.key[0] == 'i' || distancia>500)){
+            this.step.destroy();
+            this.step=null;
+        }
     }
 
     getLastDirection(){ //returns 'l' or 'r'
