@@ -5,8 +5,8 @@ const COLOR_DARK = 0x260e04;
 
 export default class Seeker extends Player {
 
-    constructor(game, id, velocidade, spawnCoord){
-        super(game, id, velocidade, 0.35, spawnCoord);
+    constructor(game, id, skin, spawnCoord){
+        super(game, id, skin, 250, 0.35, spawnCoord);
         this.lastHidder = null;
     }   
 
@@ -28,12 +28,14 @@ export default class Seeker extends Player {
         });
     }
 
-    create(rt){
+    create(){
         super.create()
         this.hitbox = this.game.physics.add.image(this.spawnCoord['x'], this.spawnCoord['y'], this.name+'-hitbox');
         this.hitbox.setScale(0.7);
         this.hitbox.setVisible(false);
-        rt.depth = 10;
+        // this.game.rt.mask = new Phaser.Display.Masks.BitmapMask(game, game.playerPrincipal.vision);
+        // this.game.rt.mask.invertAlpha = true;
+        // this.game.rt.depth = 10;
     }
 
     update(button){
@@ -74,7 +76,6 @@ export default class Seeker extends Player {
             this.cooldown = true;
             
             if (this.lastHidder!=null && this.game.physics.overlap(this.hitbox, this.lastHidder.player)){//hidder na área
-                console.log(this.game.physics.overlap(this.hitbox, this.lastHidder.player));
                 this.kill();
             }
         }
@@ -83,5 +84,10 @@ export default class Seeker extends Player {
     kill(){
         this.lastHidder.die();
 
+    }
+
+    destroy(){
+        super.destroy()
+        this.hitbox.destroy()
     }
 }
