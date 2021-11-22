@@ -7,7 +7,6 @@ export class MenuScene extends Phaser.Scene {
     }
     init(data){
         console.log(data);
-        console.log("ok");
     }
     preload(){
         this.load.image("background", "../assets/menu/background.jpeg");
@@ -35,7 +34,7 @@ export class MenuScene extends Phaser.Scene {
         })
         
         playButton.on("pointerup", () => {
-            this.scene.start(CST.SCENES.PARTIDA);
+            this.scene.start(CST.SCENES.LOAD);
         })
 
     }
