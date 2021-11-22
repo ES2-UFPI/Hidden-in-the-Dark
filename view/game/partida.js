@@ -109,6 +109,11 @@ export default class Partida extends Phaser.Scene
         this.keysText.depth = 50;
         this.keysText.setScrollFactor(0, 0);
 
+        this.name = localStorage.getItem("playerName");
+        this.playerName = this.add.text(this.game.renderer.width / 2, this.game.renderer.height / 2.2, this.name, { fontSize: '12px', fill: '#FFFFFF' }).setOrigin(0.5);
+        this.playerName.depth = 50;
+        this.playerName.setScrollFactor(0, 0);
+
         
         
 
