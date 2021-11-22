@@ -2,6 +2,7 @@ import Hidder from "./hidder.js";
 import Seeker from "./seeker.js";
 import Chest from "./chest.js";
 import Skins from "./skins.js";
+import Gate from "./gate.js";
 import { getChestLocation } from "./chest-spawn.js";
 import { CST } from "../CST.js"
 
@@ -29,7 +30,10 @@ export default class Partida extends Phaser.Scene
 
         this.skins = new Skins(this);
         this.chests = [];
-        
+
+        this.gates = []
+        this.gates.push(new Gate(this, 1, {x:3136,y:5548}))
+        this.gates.push(new Gate(this, 2, {x:1760,y:650}))
     }
 
     preload (){
@@ -41,7 +45,6 @@ export default class Partida extends Phaser.Scene
         this.load.image("fogVision", "./assets/players/view-mask.png");
         //carregando a skin do jogador
         // this.player.preload();
-        
 
         this.load.audio('theme', [
             "./assets/sounds/musica_de_fundo.mp3"
@@ -61,6 +64,8 @@ export default class Partida extends Phaser.Scene
         this.load.audio('chest_open', [
             "./assets/sounds/chest-sound-2.mp3"
         ]);
+
+        this.gates.forEach((gate) =>{gate.preload()});
     }
       
     create (){
@@ -77,7 +82,7 @@ export default class Partida extends Phaser.Scene
         this.objectCollider = map.createLayer("objectCollider", tileset, 0, 0);
         this.objectCollider.setCollisionByProperty({ collider: true });
         
-
+        this.gates.forEach((gate) =>{gate.create()});
         // fazendo a fog
         // pegando o tamanho da tela do jogo
         // const width = this.scale.width;
@@ -148,7 +153,7 @@ export default class Partida extends Phaser.Scene
             game.playerPrincipal.preload();
             game.playerPrincipal.create();
             game.physics.add.collider(game.playerPrincipal.player, game.objectCollider);
-            game.playerPrincipal.interactions(game.chests, game.players);
+            game.playerPrincipal.interactions(game.gates, game.chests, game.players);
             game.camera.startFollow(game.playerPrincipal.player); 
             game.rt.mask = new Phaser.Display.Masks.BitmapMask(game, game.playerPrincipal.vision);
             game.rt.mask.invertAlpha = true;

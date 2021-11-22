@@ -18,8 +18,8 @@ export default class Seeker extends Player {
         super.preload()
     }
 
-    interactions(chests, hidders){
-        super.interactions(chests);
+    interactions(gates, chests, hidders){
+        super.interactions(chests,gates);
         
         hidders.forEach((h) => {//interações com baús
             this.game.physics.add.overlap(this.hitbox, h.player, ()=>{
