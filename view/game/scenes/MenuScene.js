@@ -10,16 +10,29 @@ export class MenuScene extends Phaser.Scene {
         console.log("ok");
     }
     preload(){
-        this.load.image("logo", "../assets/menu/logo.png");
+        this.load.image("background", "../assets/menu/background.jpeg");
         this.load.image("play", "../assets/menu/playButton.png");
     }
     create(){
-        this.tittle = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.20, "logo").setDepth(1);
-        this.tittle.setScale(0.3);
+        this.back = this.add.image(this.game.renderer.width / 2,this.game.renderer.height / 2, "background");
+        this.back.setScale(1);
 
-        let playButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height / 2, "play").setDepth(1).setScale(0.2);
+        var player = prompt("Please enter your name", "name");
+        localStorage.setItem("playerName", player);
+
+        this.name = this.add.text(this.game.renderer.width / 1.9, this.game.renderer.height / 1.5,"Bem-vindo "+ player , { fontFamily: 'OCR A Std, monospace' ,fontSize: '20px', fill: '#FFFFFF'}).setOrigin(0.5);
+        let playButton = this.add.image(this.game.renderer.width / 1.9, this.game.renderer.height / 1.3, "play").setDepth(1).setScale(0.5);
 
         playButton.setInteractive();
+
+        playButton.on("pointerover", () => {
+            playButton.setScale(0.6);
+
+        })
+
+        playButton.on("pointerout", () => {
+            playButton.setScale(0.5);
+        })
         
         playButton.on("pointerup", () => {
             this.scene.start(CST.SCENES.PARTIDA);

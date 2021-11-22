@@ -126,7 +126,7 @@ export default class Partida extends Phaser.Scene
         this.socket.on('chests', (chests)=>(this.initChests(chests, this)));
         this.socket.on('openChest', (id)=>(this.openChest(id, this)));
         this.socket.on('desconectado', (id)=>(this.deletePlayer(id, this)));
-        this.socket.emit('playerLogin', {partida: 0, name: 'jose'});//id da partida que está entrando
+        this.socket.emit('playerLogin', {partida: 0, name: localStorage.getItem("playerName")});//id da partida que está entrando
 
     }
 
