@@ -1,5 +1,6 @@
 import Partida from "./partida.js";
 import {MenuScene} from "./scenes/MenuScene.js"
+import {LoadScene} from "./scenes/LoadScene.js"
 
 const config = {
     type: Phaser.WEBGL,
@@ -8,6 +9,7 @@ const config = {
     height: 600,
     scene: [
       MenuScene,
+      LoadScene,
       Partida
     ],
     physics: {
