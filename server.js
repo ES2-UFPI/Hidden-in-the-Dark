@@ -25,7 +25,7 @@ io.on('connection', function(socket){
   socket.on('playerLogin', function (data) {
     console.log(data)
     if (data == undefined) return;
-    partidas[data.partida].conectarPlayer(data, socket);
+    partidas[data.partida].addListaEspera(data, socket);
   });
 
   socket.on('disconnect', function(){
