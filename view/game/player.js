@@ -1,7 +1,7 @@
+const STEP_SOUND_DISTANCE = 600;
 
 export default class Player {
-
-    constructor(game, id, skin, velocidade, visao, spawnCoord){
+    constructor(game, id, skin, velocidade, visao, spawnCoord, name){
         this.game = game;
         this.id = id;
         this.name = 'player_'+this.id;
@@ -13,6 +13,7 @@ export default class Player {
         this.prevVelocity = undefined;
         this.prevDir = 'l';
         this.camp_vision = visao;
+        this.playerName = name;
     }
 
     preload() {
@@ -43,12 +44,17 @@ export default class Player {
 
         this.step = null;
         
+        //fontFamily:  
+        this.nameText = this.game.add.text(0, 0, this.playerName, { fontSize: '12px', fill: '#FFFFFF' });
+        this.nameText.depth = 21;
+        // this.nameText.setScrollFactor(0, 0);
     }
 
     update(button){
         // if (this.game.PlayerPrincipal != null || !(this.id == this.game.PlayerPrincipal.id)){//personagem controlado pelo sv
         //     return
         // }
+        
         //personagem controlado pelo player
         if (!this.game.skins.getAnimStarted(this.skin))return;
         this.prevVelocity = this.player.body.velocity.clone();
@@ -137,8 +143,33 @@ export default class Player {
     }
 
     updatePlayer(data){
+        this.nameText.setPosition(this.player.x - (this.playerName.length * 4) , this.player.y - 25);
         this.player.anims.play(data.anim, true);
         this.player.setPosition(data.x, data.y);
+
+        var distancia = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.game.playerPrincipal.player.x, this.game.playerPrincipal.player.y)
+        var volume = (distancia > STEP_SOUND_DISTANCE)? 0 : 1-distancia/STEP_SOUND_DISTANCE ;
+        if(this.player.anims.currentAnim.key[0] == 'w'){
+            if (this.step == null){
+                this.step = this.game.sound.add('step');
+                this.step.play({
+                    mute:false,
+                    loop:true, 
+                    volume:volume,
+                    rate:1,
+                    detune:0,
+                    seek:0,
+                    delay:0
+                });
+            }
+            else {
+                this.step.setVolume(volume);
+            }
+        }
+        if(this.step != null && (this.player.anims.currentAnim.key[0] == 'i' || distancia>500)){
+            this.step.destroy();
+            this.step=null;
+        }
     }
 
     getLastDirection(){ //returns 'l' or 'r'
@@ -154,5 +185,8 @@ export default class Player {
 
     destroy(){
         this.player.destroy()
+        this.step.destroy();
+        this.step=null;
+        this.nameText.destroy;
     }
 }

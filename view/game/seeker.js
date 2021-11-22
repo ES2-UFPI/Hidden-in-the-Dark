@@ -5,8 +5,8 @@ const COLOR_DARK = 0x260e04;
 
 export default class Seeker extends Player {
 
-    constructor(game, id, skin, spawnCoord){
-        super(game, id, skin, 250, 0.35, spawnCoord);
+    constructor(game, id, skin, spawnCoord,name){
+        super(game, id, skin, 250, 0.35, spawnCoord,name);
         this.lastHidder = null;
     }   
 

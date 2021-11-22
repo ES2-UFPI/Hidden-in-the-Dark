@@ -31,7 +31,7 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){
     console.log('O usuario se desconectou');
     partidas[0].desconectarPlayer(socket);
-    io.emit('disconectado', socket.id);
+    io.emit('desconectado', socket.id);
   })
   
 })
@@ -42,7 +42,7 @@ const PORT = process.env.PORT || 8080;
 
 
 server.listen(PORT, function () {
-  console.log(`Listening on ${server.address().port}`);
+  console.log(`Hidden in the Dark On | Port: ${server.address().port}`);
 });
 
 var players = {};
