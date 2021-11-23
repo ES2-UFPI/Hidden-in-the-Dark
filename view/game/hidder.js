@@ -16,16 +16,15 @@ export default class Hidder extends Player {
         this.alive = true;
     }
 
-    interactions(chests,hidders){
-        super.interactions(chests);
+    interactions(gates, chests,hidders){
+        super.interactions(chests,gates);
         this.circularProgress = undefined;
 
-        
-         chests.forEach((c) => {//interações com baús
-             this.game.physics.add.overlap(this.player, c.zone, ()=>{
-                 this.lastChest = c;
-             });
-         });
+        chests.forEach((c) => {//interações com baús
+            this.game.physics.add.overlap(this.player, c.zone, ()=>{
+                this.lastChest = c;
+            });
+        });
         
      }
 

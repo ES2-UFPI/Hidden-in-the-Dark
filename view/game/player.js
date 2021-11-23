@@ -177,10 +177,13 @@ export default class Player {
         else return 'r';
     }
 
-    interactions (chests){
+    interactions (chests, gates){
         chests.forEach((c) => {
             this.game.physics.add.collider(this.player, c.chest);
         }); 
+        gates.forEach((g)=>{
+            this.game.physics.add.collider(this.player, g.zone_gate);
+        });
     }
 
     destroy(){

@@ -70,6 +70,10 @@ export default class Chest {
             delay:0
             };
             chest_open.play(chest_open_config);
+
+            if(this.game.keys == 1){
+                this.game.gates.forEach((g)=>{g.open()});
+            }
         }
     }
 
