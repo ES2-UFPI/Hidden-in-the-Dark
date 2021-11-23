@@ -32,10 +32,7 @@ export class MenuScene extends Phaser.Scene {
         })
         
         playButton.on("pointerup", () => {
-            this.socket.emit('playerLogin', {
-                partida: 0,
-                name:player
-            });
+            
             this.scene.start(CST.SCENES.LOAD);
         })
 

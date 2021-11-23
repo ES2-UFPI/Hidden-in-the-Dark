@@ -16,10 +16,7 @@ module.exports = class Partida{
     }
 
     partidaStarter(){
-        console.log(this.listaDeEspera.size)
         if (this.listaDeEspera.size<PLAYER_QUANT) return;
-        console.log('iniciando');
-        //console.log(this.listaDeEspera)
         this.iniciarPartida();
 
         // var usuariosEntrando = new Map();
@@ -28,11 +25,11 @@ module.exports = class Partida{
         // this.iniciarPartida(usuariosEntrando);
     }
 
-    iniciarPartida(){//map com usuarios na lista de espera que vão entra, falta arrumar na função
-        //console.log(this.listaDeEspera)
+    iniciarPartida(){//map com usuarios na lista de espera que vão entrar, falta arrumar na função
         if (this.status == 'RUNNING') return;
-        this.keys = 0;
         this.status = 'RUNNING'//FIXME
+        console.log('Partida '+this.status)
+        this.keys = 0;
         var n = 12;//quant de baús
         var locations = require('./locations/chest-spawn.json');
         this.chests = []
@@ -45,7 +42,7 @@ module.exports = class Partida{
             })
         }
         // PLAYERS
-        this.id_players = new Map(); //map com id (socket) e objeto player
+        this.id_players = new Map(); //map com socket e objeto player
 
         var sockets = Array.from(this.listaDeEspera.keys());
         sockets.forEach(s => {
@@ -73,9 +70,11 @@ module.exports = class Partida{
             team: 'hidder',
         }
         this.id_players.set(socket, p);
-        //console.log(socks)
-        //console.log(this.id_players)
+        var socks = Array.from(this.id_players.values());
         socket.emit('chests', this.chests);
+        // for (let s in socks){
+        //     s.emit('newPlayer', p)
+        // }
         socket.emit('currentPlayers', Array.from(this.id_players.values()));
         socket.broadcast.emit('newPlayer', p);
         //for (socket.on())

@@ -1,5 +1,4 @@
 Partida = require ('./game_business/partida.js');
-console.log(Partida)
 
 const path = require('path');
 const express = require('express');
@@ -20,10 +19,7 @@ var partidas = [new Partida()]
 
 io.on('connection', function(socket){
 
-  //console.log(socket);
-  //console.log(partidas)
   socket.on('playerLogin', function (data) {
-    console.log(data)
     if (data == undefined) return;
     partidas[data.partida].addListaEspera(data, socket);
   });
