@@ -73,7 +73,6 @@ module.exports = class Partida{
             team: 'hidder',
         }
         this.id_players.set(socket, p);
-        var socks = Array.from(this.id_players.values());
         //console.log(socks)
         //console.log(this.id_players)
         socket.emit('chests', this.chests);
