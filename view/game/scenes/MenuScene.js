@@ -1,12 +1,10 @@
 import { CST } from "../CST.js"
 export class MenuScene extends Phaser.Scene {
-    constructor(){
+    constructor(socket){
         super({
             key: CST.SCENES.MENU
         })
-    }
-    init(data){
-        console.log(data);
+        this.socket = socket;
     }
     preload(){
         this.load.image("background", "../assets/menu/background.jpeg");
@@ -34,6 +32,10 @@ export class MenuScene extends Phaser.Scene {
         })
         
         playButton.on("pointerup", () => {
+            this.socket.emit('playerLogin', {
+                partida: 0,
+                name:player
+            });
             this.scene.start(CST.SCENES.LOAD);
         })
 

@@ -1,4 +1,4 @@
-
+const PLAYER_QUANT = 2
 
 module.exports = class Partida{
 
@@ -10,15 +10,15 @@ module.exports = class Partida{
     addListaEspera(data, socket){
         var user = {
             name: data.name,
-            socket: socket,
         }
-        this.listaDeEspera.set(socket.id, user);
+        this.listaDeEspera.set(socket, user);
         this.partidaStarter();
     }
 
     partidaStarter(){
         console.log(this.listaDeEspera.size)
-        if (this.listaDeEspera.size<2) return;
+        if (this.listaDeEspera.size<PLAYER_QUANT) return;
+        console.log('iniciando');
         //console.log(this.listaDeEspera)
         this.iniciarPartida();
 
@@ -30,6 +30,7 @@ module.exports = class Partida{
 
     iniciarPartida(){//map com usuarios na lista de espera que vão entra, falta arrumar na função
         //console.log(this.listaDeEspera)
+        if (this.status == 'RUNNING') return;
         this.keys = 0;
         this.status = 'RUNNING'//FIXME
         var n = 12;//quant de baús
@@ -46,8 +47,14 @@ module.exports = class Partida{
         // PLAYERS
         this.id_players = new Map(); //map com id (socket) e objeto player
 
-        this.conectarPlayer(this.listaDeEspera.get(Array.from(this.listaDeEspera.keys())[0]), this.listaDeEspera.get(Array.from(this.listaDeEspera.keys())[0]).socket);
-        this.conectarPlayer(this.listaDeEspera.get(Array.from(this.listaDeEspera.keys())[1]), this.listaDeEspera.get(Array.from(this.listaDeEspera.keys())[1]).socket);
+        var sockets = Array.from(this.listaDeEspera.keys());
+        sockets.forEach(s => {
+            s.emit('start', {});
+            s.on('ready',  (data)=>this.conectarPlayer(data, s));
+        });
+
+        // this.conectarPlayer(this.listaDeEspera.get(Array.from(this.listaDeEspera.keys())[0]), this.listaDeEspera.get(Array.from(this.listaDeEspera.keys())[0]).socket);
+        // this.conectarPlayer(this.listaDeEspera.get(Array.from(this.listaDeEspera.keys())[1]), this.listaDeEspera.get(Array.from(this.listaDeEspera.keys())[1]).socket);
 
         // for (var i in listaDeEspera.length-1){//4 hidders
         //     this.conectarPlayer(this.listaDeEspera[i].getValue(), this.listaDeEspera[i].getKey());
@@ -63,26 +70,30 @@ module.exports = class Partida{
             x: 1834,
             y: 527,
             playerId: socket.id,
-            team: 'hidder'
+            team: 'hidder',
         }
-        this.id_players.set(socket.id, p);
-        console.log(this.id_players)
+        this.id_players.set(socket, p);
+        var socks = Array.from(this.id_players.values());
+        //console.log(socks)
+        //console.log(this.id_players)
         socket.emit('chests', this.chests);
         socket.emit('currentPlayers', Array.from(this.id_players.values()));
         socket.broadcast.emit('newPlayer', p);
+        //for (socket.on())
         socket.on('playerMovement',  (movementData)=>this.playerMovement(movementData, socket));
         socket.on('chestOpen',  (id)=>this.chestOpen(id, socket));
     }
 
     desconectarPlayer(socket){
-        this.id_players.delete(socket.id);
+        if (this.id_players == undefined || this.id_players.get(socket) == undefined) return;
+        this.id_players.delete(socket);
     }
 
     playerMovement(movementData, socket){
-        this.id_players.get(socket.id).x = movementData.x;
-        this.id_players.get(socket.id).y = movementData.y;
-        this.id_players.get(socket.id).anim = movementData.anim;
-        socket.broadcast.emit('playerMoved', this.id_players.get(socket.id));
+        this.id_players.get(socket).x = movementData.x;
+        this.id_players.get(socket).y = movementData.y;
+        this.id_players.get(socket).anim = movementData.anim;
+        socket.broadcast.emit('playerMoved', this.id_players.get(socket));
     }
 
     //cliente envia 'chestOpen'

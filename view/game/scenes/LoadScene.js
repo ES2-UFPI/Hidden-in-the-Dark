@@ -1,9 +1,11 @@
 import { CST } from "../CST.js"
 export class LoadScene extends Phaser.Scene {
-    constructor(){
+    constructor(socket){
         super({
             key: CST.SCENES.LOAD
         })
+        this.socket = socket;
+        this.in_game = false;
     }
     init(){
 
@@ -12,12 +14,16 @@ export class LoadScene extends Phaser.Scene {
 
     }
     create(){
-
+        console.log(this.socket)
         this.text = this.add.text(this.game.renderer.width / 2, this.game.renderer.height / 2,"aguardando partida... " , { fontFamily: 'OCR A Std, monospace' ,fontSize: '46px', fill: '#FFFFFF'}).setOrigin(0.5);
-        this.time.delayedCall(2000, goToPlay, null, this);
+        this.socket.on('start', (data)=>goToPlay(data, this));
     }
+    
+
 }
 
-function goToPlay(){
-        this.scene.start(CST.SCENES.PARTIDA);
+function goToPlay(data, that){
+    if (that.in_game==true) return;
+    that.in_game = true;
+    that.scene.start(CST.SCENES.PARTIDA);
 }

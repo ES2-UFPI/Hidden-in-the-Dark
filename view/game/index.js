@@ -1,6 +1,7 @@
 import Partida from "./partida.js";
 import {MenuScene} from "./scenes/MenuScene.js"
 import {LoadScene} from "./scenes/LoadScene.js"
+var socket = io();
 
 const config = {
     type: Phaser.WEBGL,
@@ -8,9 +9,9 @@ const config = {
     width: 800,
     height: 600,
     scene: [
-      MenuScene,
-      LoadScene,
-      Partida
+      new MenuScene(socket),
+      new LoadScene(socket),
+      new Partida(socket)
     ],
     physics: {
         default: "arcade",
@@ -20,6 +21,6 @@ const config = {
       },
 };
 
-var socket = io();
+
 
 const game = new Phaser.Game(config);

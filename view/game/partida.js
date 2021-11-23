@@ -3,12 +3,11 @@ import Seeker from "./seeker.js";
 import Chest from "./chest.js";
 import Skins from "./skins.js";
 import Gate from "./gate.js";
-import { getChestLocation } from "./chest-spawn.js";
 import { CST } from "../CST.js"
 
 export default class Partida extends Phaser.Scene
 {
-    constructor ()
+    constructor (socket)
     {
         super({
             key: CST.SCENES.PARTIDA
@@ -26,11 +25,9 @@ export default class Partida extends Phaser.Scene
         this.playeralatorio= new Hidder(this,  10, 3, {'x': 0, 'y': 0});
         this.playeralatorio2= new Hidder(this,  11, 2, {'x': 0, 'y': 0});
 
-        this.socket = io();
-
         this.skins = new Skins(this);
         this.chests = [];
-
+        this.socket = socket;
         this.gates = []
         this.gates.push(new Gate(this, 1, {x:3136,y:5548}))
         this.gates.push(new Gate(this, 2, {x:1760,y:650}))
@@ -131,7 +128,7 @@ export default class Partida extends Phaser.Scene
         this.socket.on('chests', (chests)=>(this.initChests(chests, this)));
         this.socket.on('openChest', (id)=>(this.openChest(id, this)));
         this.socket.on('desconectado', (id)=>(this.deletePlayer(id, this)));
-        this.socket.emit('playerLogin', {partida: 0, name: localStorage.getItem("playerName")});//id da partida que está entrando
+        this.socket.emit('ready', {partida: 0, name: localStorage.getItem("playerName")});//id da partida que está entrando
 
     }
 
