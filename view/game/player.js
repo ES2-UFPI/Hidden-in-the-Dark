@@ -143,13 +143,14 @@ export default class Player {
     }
 
     updatePlayer(data){
+        //if (this.game.playerName == undefined) return;
         this.nameText.setPosition(this.player.x - (this.playerName.length * 4) , this.player.y - 25);
         this.player.anims.play(data.anim, true);
         this.player.setPosition(data.x, data.y);
 
 
         // SOM 
-        if(this.game.playerPrincipal==null)return;
+        if(this.game.playerPrincipal == null) return;
         var distancia = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.game.playerPrincipal.player.x, this.game.playerPrincipal.player.y)
         var volume = (distancia > STEP_SOUND_DISTANCE)? 0 : 1-distancia/STEP_SOUND_DISTANCE ;
         if(this.player.anims.currentAnim.key[0] == 'w'){

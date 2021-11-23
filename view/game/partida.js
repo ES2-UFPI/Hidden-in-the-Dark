@@ -146,7 +146,10 @@ export default class Partida extends Phaser.Scene
         if (game.socket == undefined) return;
         if (id == game.socket.id) {//player principal é carregado
             if (game.playerPrincipal != null) return;//player principal ja foi instanciado
-            game.playerPrincipal = new Hidder(game,  id, 2, {'x': data.x, 'y': data.y},data.name);
+            if (data.team == 'hidder')
+                game.playerPrincipal = new Hidder(game,  id, data.skin, {'x': data.x, 'y': data.y},data.name);
+            else 
+                game.playerPrincipal = new Seeker(game,  id, data.skin, {'x': data.x, 'y': data.y},data.name);
             game.playerPrincipal.preload();
             game.playerPrincipal.create();
             game.physics.add.collider(game.playerPrincipal.player, game.objectCollider);
@@ -158,7 +161,10 @@ export default class Partida extends Phaser.Scene
         }
         else {//outro player
             if (this.getPlayerExists(game, id)) return;//player ja foi instanciado
-            var p = new Seeker(game, id, 3, {'x': data.x, 'y': data.y},data.name);
+            if (data.team == 'hidder')
+                var p = new Hidder(game, id, data.skin, {'x': data.x, 'y': data.y},data.name);
+            else
+                var p = new Seeker(game, id, data.skin, {'x': data.x, 'y': data.y},data.name);
             p.preload();
             p.create();
             game.players.push(p);
@@ -166,6 +172,7 @@ export default class Partida extends Phaser.Scene
     }
 
     createPlayers(players, game){
+        console.log(players);
         for (var indice in players){
             if (players[indice] == null) continue;
             this.createPlayer(players[indice].playerId, players[indice], game)
@@ -220,21 +227,4 @@ export default class Partida extends Phaser.Scene
         this.keys += 1;
         this.keysText.setText('keys: '+this.keys);
     }
-
-}
-function shuffle(array) {
-    let currentIndex = array.length,  randomIndex;
-    // While there remain elements to shuffle...
-    while (currentIndex != 0) {
-  
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-  
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]];
-    }
-  
-    return array;
 }

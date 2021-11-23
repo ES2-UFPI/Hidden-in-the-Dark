@@ -1,4 +1,4 @@
-const PLAYER_QUANT = 2
+const PLAYER_QUANT = 4
 
 module.exports = class Partida{
 
@@ -29,8 +29,10 @@ module.exports = class Partida{
         if (this.status == 'RUNNING') return;
         this.status = 'RUNNING'//FIXME
         console.log('Partida '+this.status)
+
+        //BAUS
         this.keys = 0;
-        var n = 11;//quant de baús
+        var n = 12;//quant de baús
         var locations = require('./locations/chest-spawn.json');
         this.chests = []
         shuffle(locations);
@@ -41,36 +43,65 @@ module.exports = class Partida{
                 is_open : false
             })
         }
+
         // PLAYERS
         this.id_players = new Map(); //map com socket e objeto player
-
+        console.log(this.listaDeEspera)
         var sockets = Array.from(this.listaDeEspera.keys());
+        console.log(sockets.length)
+        var players_ready = 0;
+
+        for (var i = 0; i < PLAYER_QUANT ; i++){
+            sockets[i].on('ready',  (data)=>{
+                players_ready += 1;
+                if (players_ready == PLAYER_QUANT)
+                    this.iniciarPlayers(sockets);
+            })
+        }
         sockets.forEach(s => {
             s.emit('start', {});
-            s.on('ready',  (data)=>this.conectarPlayer(data, s));
         });
 
-        // this.conectarPlayer(this.listaDeEspera.get(Array.from(this.listaDeEspera.keys())[0]), this.listaDeEspera.get(Array.from(this.listaDeEspera.keys())[0]).socket);
-        // this.conectarPlayer(this.listaDeEspera.get(Array.from(this.listaDeEspera.keys())[1]), this.listaDeEspera.get(Array.from(this.listaDeEspera.keys())[1]).socket);
+   }
 
-        // for (var i in listaDeEspera.length-1){//4 hidders
-        //     this.conectarPlayer(this.listaDeEspera[i].getValue(), this.listaDeEspera[i].getKey());
-        // }
-        // this.conectarPlayer(this.listaDeEspera[i].getValue(), this.listaDeEspera[i].getValue().socket);//seeker
+    iniciarPlayers(sockets){
+        var p_locations = require('./locations/player-spawn.json');
+        shuffle(p_locations);
+        for (var counter = 0; counter < PLAYER_QUANT-1; counter++){
+            this.conectarPlayer({
+                    name: this.listaDeEspera.get(sockets[counter]).name,
+                    x: p_locations[counter].x,
+                    y: p_locations[counter].y,
+                    team: 'hidder',
+                    skin: '2'
+                } , 
+                sockets[counter]
+            );
+        }
+        //ultimo (hidder)
+        this.conectarPlayer({
+                name: this.listaDeEspera.get(sockets[counter]).name,
+                x: p_locations[counter].x,
+                y: p_locations[counter].y,
+                team: 'seeker',
+                skin: '3'
+            } , 
+            sockets[counter]
+        );
+
     }
 
     conectarPlayer(data, socket){
         var p = {
             name: data.name,
-            anim: 'idleLeft',
-            skin: '2',
-            x: 1834,
-            y: 527,
+            anim: 'idleLeft_'+data.skin,
+            skin: data.skin,
+            x: data.x,
+            y: data.y,
             playerId: socket.id,
-            team: 'hidder',
+            team: data.team
         }
         this.id_players.set(socket, p);
-        var socks = Array.from(this.id_players.values());
         socket.emit('chests', this.chests);
         // for (let s in socks){
         //     s.emit('newPlayer', p)
