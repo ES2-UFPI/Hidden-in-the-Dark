@@ -12,8 +12,8 @@ export default class Gate {
     preload() {
         this.game.load.image(this.name+'-zone', './assets/items/chest-zone.png');
         this.game.load.spritesheet(this.name, this.caminho, {
-            frameWidth: 46,
-            frameHeight: 59,
+            frameWidth: 182.9,
+            frameHeight: 236,
         });
 
         this.game.load.audio('gate_open', [
@@ -25,13 +25,13 @@ export default class Gate {
         this.gate = this.game.physics.add.staticSprite(this.coord['x'], this.coord['y'], this.name);
         
         this.zone_gate = this.game.physics.add.staticImage(this.coord['x'], this.coord['y']+85, this.name+'-zone');
-        this.zone_gate.setSize(110,20)
+        this.zone_gate.setSize(110,1)
         //this.zone_gate.setDisplaySize(110,10)
         this.zone_gate.setVisible(false);
         
         this.gate.depth = 20;
         this.zone_gate.depth = 20;
-        this.gate.setScale(2.9).update();
+        this.gate.setScale(0.75).update();
 
         const anims = this.game.anims;
 
