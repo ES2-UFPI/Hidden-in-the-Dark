@@ -30,7 +30,7 @@ module.exports = class Partida{
         this.status = 'RUNNING'//FIXME
         console.log('Partida '+this.status)
         this.keys = 0;
-        var n = 12;//quant de baús
+        var n = 11;//quant de baús
         var locations = require('./locations/chest-spawn.json');
         this.chests = []
         shuffle(locations);
