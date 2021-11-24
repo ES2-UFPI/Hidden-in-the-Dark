@@ -46,9 +46,7 @@ module.exports = class Partida{
 
         // PLAYERS
         this.id_players = new Map(); //map com socket e objeto player
-        console.log(this.listaDeEspera)
         var sockets = Array.from(this.listaDeEspera.keys());
-        console.log(sockets.length)
         var players_ready = 0;
 
         for (var i = 0; i < PLAYER_QUANT ; i++){
@@ -111,6 +109,12 @@ module.exports = class Partida{
         //for (socket.on())
         socket.on('playerMovement',  (movementData)=>this.playerMovement(movementData, socket));
         socket.on('chestOpen',  (id)=>this.chestOpen(id, socket));
+        socket.on('killHidder',  (id)=>this.killHidder(id, socket));
+    }
+
+    killHidder(id,socket){
+        this.desconectarPlayer(socket)
+        socket.broadcast.emit('playerKilled', id);
     }
 
     desconectarPlayer(socket){
@@ -119,6 +123,7 @@ module.exports = class Partida{
     }
 
     playerMovement(movementData, socket){
+        if(this.id_players.get(socket) == undefined){return}
         this.id_players.get(socket).x = movementData.x;
         this.id_players.get(socket).y = movementData.y;
         this.id_players.get(socket).anim = movementData.anim;

@@ -191,7 +191,7 @@ export default class Player {
     }
 
     destroy(){
-        if (this.player!=null) this.player.destroy()
+        if (this.player!=null) this.player.destroy();
         if (this.step!=null) this.step.destroy();
         this.step=null;
         if (this.nameText!=null) this.nameText.destroy();

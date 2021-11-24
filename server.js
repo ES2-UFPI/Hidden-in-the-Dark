@@ -15,6 +15,10 @@ const GAME_DIR = path.join(__dirname, './view/game');
 app.use(express.static(HTML_DIR));
 app.use(express.static(GAME_DIR));
 
+app.get('/test', (req, res) => {
+  res.send( '<script src="/socket.io/socket.io.js"></script><script type="module" src="/test.js"></script>')
+})
+
 var partidas = [new Partida()]
 
 io.on('connection', function(socket){
