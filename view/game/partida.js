@@ -3,12 +3,11 @@ import Seeker from "./seeker.js";
 import Chest from "./chest.js";
 import Skins from "./skins.js";
 import Gate from "./gate.js";
-import { getChestLocation } from "./chest-spawn.js";
 import { CST } from "../CST.js"
 
 export default class Partida extends Phaser.Scene
 {
-    constructor ()
+    constructor (socket)
     {
         super({
             key: CST.SCENES.PARTIDA
@@ -23,14 +22,12 @@ export default class Partida extends Phaser.Scene
         //this.player = new Seeker(this, 2, 250);
 
 
-        this.playeralatorio= new Hidder(this,  10, 3, {'x': 0, 'y': 0});
-        this.playeralatorio2= new Hidder(this,  11, 2, {'x': 0, 'y': 0});
-
-        this.socket = io();
+        this.playeralatorio= new Hidder(this,  10, 3, {'x': 0, 'y': 0}, '');
+        this.playeralatorio2= new Hidder(this,  11, 2, {'x': 0, 'y': 0}, '');
 
         this.skins = new Skins(this);
         this.chests = [];
-
+        this.socket = socket;
         this.gates = []
         this.gates.push(new Gate(this, 1, {x:3136,y:5545}))
         this.gates.push(new Gate(this, 2, {x:1760,y:648}))
@@ -55,7 +52,7 @@ export default class Partida extends Phaser.Scene
 
         // baus
         this.load.image('chest-zone', './assets/items/chest-zone.png');
-
+        this.load.image('safe-zone', './assets/items/chest-zone.png');
         this.load.spritesheet('chest', './assets/items/chest.png', {
             frameWidth: 15,
             frameHeight: 18,
@@ -84,9 +81,6 @@ export default class Partida extends Phaser.Scene
         
         this.gates.forEach((gate) =>{gate.create()});
         // fazendo a fog
-        // pegando o tamanho da tela do jogo
-        // const width = this.scale.width;
-        // const height = this.scale.height;
         // fazendo uma textura do tamanho do mapa 
         this.rt = this.make.renderTexture({
             width:4928,
@@ -102,7 +96,14 @@ export default class Partida extends Phaser.Scene
         this.playeralatorio.create()
         this.playeralatorio2.create()
 
-     
+        // this.safe_zone = [];
+        // this.safe_zone.push(this.physics.add.staticImage(1751, 151, 'safe-zone'));
+        // this.safe_zone.push(this.physics.add.staticImage(3145, 6256, 'safe-zone'));
+        // this.safe_zone.forEach((zone) =>{
+        //     zone.setVisible(false);
+        //     zone.setSize(150,130);
+        //     //zone.setDisplaySize(150,130);
+        // });
         this.camera = this.cameras.main.setZoom(2);
 
         //define limites de alcançe da câmera
@@ -131,7 +132,8 @@ export default class Partida extends Phaser.Scene
         this.socket.on('chests', (chests)=>(this.initChests(chests, this)));
         this.socket.on('openChest', (id)=>(this.openChest(id, this)));
         this.socket.on('desconectado', (id)=>(this.deletePlayer(id, this)));
-        this.socket.emit('playerLogin', {partida: 0, name: localStorage.getItem("playerName")});//id da partida que está entrando
+        this.socket.on('playerKilled', (id)=>(this.killPlayer(id, this)));
+        this.socket.emit('ready', {partida: 0, name: localStorage.getItem("playerName")});//id da partida que está entrando
 
     }
 
@@ -149,7 +151,10 @@ export default class Partida extends Phaser.Scene
         if (game.socket == undefined) return;
         if (id == game.socket.id) {//player principal é carregado
             if (game.playerPrincipal != null) return;//player principal ja foi instanciado
-            game.playerPrincipal = new Hidder(game,  id, 2, {'x': data.x, 'y': data.y},data.name);
+            if (data.team == 'hidder')
+                game.playerPrincipal = new Hidder(game,  id, data.skin, {'x': data.x, 'y': data.y},data.name);
+            else 
+                game.playerPrincipal = new Seeker(game,  id, data.skin, {'x': data.x, 'y': data.y},data.name);
             game.playerPrincipal.preload();
             game.playerPrincipal.create();
             game.physics.add.collider(game.playerPrincipal.player, game.objectCollider);
@@ -157,15 +162,31 @@ export default class Partida extends Phaser.Scene
             game.camera.startFollow(game.playerPrincipal.player); 
             game.rt.mask = new Phaser.Display.Masks.BitmapMask(game, game.playerPrincipal.vision);
             game.rt.mask.invertAlpha = true;
-            game.rt.depth = 40;
+            if (data.team == 'hidder')
+                game.rt.depth = 40;
+            else 
+                game.rt.depth = 10;
         }
         else {//outro player
             if (this.getPlayerExists(game, id)) return;//player ja foi instanciado
-            var p = new Seeker(game, id, 3, {'x': data.x, 'y': data.y},data.name);
+            if (data.team == 'hidder')
+                var p = new Hidder(game, id, data.skin, {'x': data.x, 'y': data.y},data.name);
+            else
+                var p = new Seeker(game, id, data.skin, {'x': data.x, 'y': data.y},data.name);
             p.preload();
             p.create();
             game.players.push(p);
         }
+    }
+
+    killPlayer(id,game){
+        game.players.forEach((player) => {
+            if (player.id == id){
+                player.die();
+                return
+            }
+        });
+        if(game.playerPrincipal.id == id){location.reload()}
     }
 
     createPlayers(players, game){
@@ -190,7 +211,6 @@ export default class Partida extends Phaser.Scene
         for(var i = 0; i < chests.length; i++){
             game.chests.push(new Chest(game, i, {x: chests[i].x, y: chests[i].y}));
         }
-        //console.log(game.chests);
         this.chests.forEach((c)=>{c.preload()});
         this.chests.forEach((c)=>{c.create()});
     }
@@ -224,21 +244,4 @@ export default class Partida extends Phaser.Scene
         this.keys += 1;
         this.keysText.setText('keys: '+this.keys);
     }
-
-}
-function shuffle(array) {
-    let currentIndex = array.length,  randomIndex;
-    // While there remain elements to shuffle...
-    while (currentIndex != 0) {
-  
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-  
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]];
-    }
-  
-    return array;
 }

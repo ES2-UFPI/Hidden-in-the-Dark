@@ -1,12 +1,11 @@
 import { CST } from "../CST.js"
 export class MenuScene extends Phaser.Scene {
-    constructor(){
+    constructor(socket, playerName){
         super({
             key: CST.SCENES.MENU
         })
-    }
-    init(data){
-        console.log(data);
+        this.socket = socket;
+        this.playerName = playerName;
     }
     preload(){
         this.load.image("background", "../assets/menu/background.jpeg");
@@ -16,10 +15,9 @@ export class MenuScene extends Phaser.Scene {
         this.back = this.add.image(this.game.renderer.width / 2,this.game.renderer.height / 2, "background");
         this.back.setScale(1);
 
-        var player = prompt("Please enter your name", "name");
-        localStorage.setItem("playerName", player);
+        this.playerName.name = prompt("Por favor, informe seu nome", "name");
 
-        this.name = this.add.text(this.game.renderer.width / 1.9, this.game.renderer.height / 1.5,"Bem-vindo "+ player , { fontFamily: 'OCR A Std, monospace' ,fontSize: '20px', fill: '#FFFFFF'}).setOrigin(0.5);
+        this.name = this.add.text(this.game.renderer.width / 1.9, this.game.renderer.height / 1.5,"Bem-vindo "+ this.playerName.name , { fontFamily: 'OCR A Std, monospace' ,fontSize: '20px', fill: '#FFFFFF'}).setOrigin(0.5);
         let playButton = this.add.image(this.game.renderer.width / 1.9, this.game.renderer.height / 1.3, "play").setDepth(1).setScale(0.5);
 
         playButton.setInteractive();

@@ -115,7 +115,7 @@ export default class Hidder extends Player {
     die(){
         var x = this.player.x
         var y = this.player.y
-        this.player.destroy();
+        super.destroy();
         if (this.circularProgress != null) this.circularProgress.destroy();
         this.alive = false;
         var particles = this.game.add.particles('red');

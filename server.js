@@ -1,5 +1,4 @@
 Partida = require ('./game_business/partida.js');
-console.log(Partida)
 
 const path = require('path');
 const express = require('express');
@@ -16,20 +15,20 @@ const GAME_DIR = path.join(__dirname, './view/game');
 app.use(express.static(HTML_DIR));
 app.use(express.static(GAME_DIR));
 
-var partidas = [new Partida()]
+app.get('/test', (req, res) => {
+  res.send( '<script src="/socket.io/socket.io.js"></script><script type="module" src="/test.js"></script>')
+})
+
+var partidas = [new Partida(io)]
 
 io.on('connection', function(socket){
 
-  //console.log(socket);
-  //console.log(partidas)
   socket.on('playerLogin', function (data) {
-    console.log(data)
     if (data == undefined) return;
-    partidas[data.partida].conectarPlayer(data, socket);
+    partidas[data.partida].addListaEspera(data, socket);
   });
 
   socket.on('disconnect', function(){
-    console.log('O usuario se desconectou');
     partidas[0].desconectarPlayer(socket);
     io.emit('desconectado', socket.id);
   })
