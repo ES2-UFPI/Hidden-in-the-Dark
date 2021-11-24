@@ -18,11 +18,6 @@ module.exports = class Partida{
     partidaStarter(){
         if (this.listaDeEspera.size<PLAYER_QUANT) return;
         this.iniciarPartida();
-
-        // var usuariosEntrando = new Map();
-        // for (var i in 3)
-        //     usuariosEntrando.set(this.listaDeEspera[i])
-        // this.iniciarPartida(usuariosEntrando);
     }
 
     iniciarPartida(){//map com usuarios na lista de espera que vão entrar, falta arrumar na função
@@ -32,7 +27,6 @@ module.exports = class Partida{
 
         //BAUS
         this.keys = 0;
-        var n = 12;//quant de baús
         var locations = require('./locations/chest-spawn.json');
         this.chests = []
         shuffle(locations);
@@ -101,12 +95,8 @@ module.exports = class Partida{
         }
         this.id_players.set(socket, p);
         socket.emit('chests', this.chests);
-        // for (let s in socks){
-        //     s.emit('newPlayer', p)
-        // }
         socket.emit('currentPlayers', Array.from(this.id_players.values()));
         socket.broadcast.emit('newPlayer', p);
-        //for (socket.on())
         socket.on('playerMovement',  (movementData)=>this.playerMovement(movementData, socket));
         socket.on('chestOpen',  (id)=>this.chestOpen(id, socket));
         socket.on('killHidder',  (id)=>this.killHidder(id, socket));
@@ -120,6 +110,8 @@ module.exports = class Partida{
     desconectarPlayer(socket){
         if (this.id_players == undefined || this.id_players.get(socket) == undefined) return;
         this.id_players.delete(socket);
+        this.listaDeEspera.delete(socket);
+        this.acabarPartida();
     }
 
     playerMovement(movementData, socket){
@@ -130,16 +122,21 @@ module.exports = class Partida{
         socket.broadcast.emit('playerMoved', this.id_players.get(socket));
     }
 
-    //cliente envia 'chestOpen'
-    //server devolve 'openChest'
     chestOpen(id, socket){
         if (this.chests[id].is_open) return;
         this.chests[id].is_open = true;
+        this.keys += 1;
         socket.broadcast.emit('openChest', id);
-        //CHECAR SE PARTIDA ACABOU
+        this.acabarPartida();
     }
 
-
+    acabarPartida(){//acaba a partida se obedecer as condições
+        if (this.status!='RUNNING') return;
+        if (this.id_players.length <= 1 || this.keys > 8){//deve terminar partida
+            this.status = 'WAITING';
+            partidaStarter();
+        }
+    }
 }
 
 function shuffle(array) {
