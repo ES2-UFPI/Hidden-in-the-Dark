@@ -29,8 +29,8 @@ export default class Partida extends Phaser.Scene
         this.chests = [];
         this.socket = socket;
         this.gates = []
-        this.gates.push(new Gate(this, 1, {x:3136,y:5548}))
-        this.gates.push(new Gate(this, 2, {x:1760,y:650}))
+        this.gates.push(new Gate(this, 1, {x:3136,y:5545}))
+        this.gates.push(new Gate(this, 2, {x:1760,y:648}))
     }
 
     preload (){
