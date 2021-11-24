@@ -52,7 +52,7 @@ export default class Partida extends Phaser.Scene
 
         // baus
         this.load.image('chest-zone', './assets/items/chest-zone.png');
-
+        this.load.image('safe-zone', './assets/items/chest-zone.png');
         this.load.spritesheet('chest', './assets/items/chest.png', {
             frameWidth: 15,
             frameHeight: 18,
@@ -81,9 +81,6 @@ export default class Partida extends Phaser.Scene
         
         this.gates.forEach((gate) =>{gate.create()});
         // fazendo a fog
-        // pegando o tamanho da tela do jogo
-        // const width = this.scale.width;
-        // const height = this.scale.height;
         // fazendo uma textura do tamanho do mapa 
         this.rt = this.make.renderTexture({
             width:4928,
@@ -99,7 +96,14 @@ export default class Partida extends Phaser.Scene
         this.playeralatorio.create()
         this.playeralatorio2.create()
 
-     
+        // this.safe_zone = [];
+        // this.safe_zone.push(this.physics.add.staticImage(1751, 151, 'safe-zone'));
+        // this.safe_zone.push(this.physics.add.staticImage(3145, 6256, 'safe-zone'));
+        // this.safe_zone.forEach((zone) =>{
+        //     zone.setVisible(false);
+        //     zone.setSize(150,130);
+        //     //zone.setDisplaySize(150,130);
+        // });
         this.camera = this.cameras.main.setZoom(2);
 
         //define limites de alcançe da câmera
@@ -158,7 +162,10 @@ export default class Partida extends Phaser.Scene
             game.camera.startFollow(game.playerPrincipal.player); 
             game.rt.mask = new Phaser.Display.Masks.BitmapMask(game, game.playerPrincipal.vision);
             game.rt.mask.invertAlpha = true;
-            game.rt.depth = 40;
+            if (data.team == 'hidder')
+                game.rt.depth = 40;
+            else 
+                game.rt.depth = 10;
         }
         else {//outro player
             if (this.getPlayerExists(game, id)) return;//player ja foi instanciado

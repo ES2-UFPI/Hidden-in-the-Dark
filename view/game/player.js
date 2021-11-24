@@ -46,7 +46,7 @@ export default class Player {
         
         //fontFamily:  
         this.nameText = this.game.add.text(0, 0, this.playerName, { fontSize: '12px', fill: '#FFFFFF' });
-        this.nameText.depth = 21;
+        this.nameText.depth = 0;
         // this.nameText.setScrollFactor(0, 0);
     }
 
