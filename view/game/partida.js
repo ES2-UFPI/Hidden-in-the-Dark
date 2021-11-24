@@ -22,8 +22,8 @@ export default class Partida extends Phaser.Scene
         //this.player = new Seeker(this, 2, 250);
 
 
-        this.playeralatorio= new Hidder(this,  10, 3, {'x': 0, 'y': 0});
-        this.playeralatorio2= new Hidder(this,  11, 2, {'x': 0, 'y': 0});
+        this.playeralatorio= new Hidder(this,  10, 3, {'x': 0, 'y': 0}, '');
+        this.playeralatorio2= new Hidder(this,  11, 2, {'x': 0, 'y': 0}, '');
 
         this.skins = new Skins(this);
         this.chests = [];
@@ -183,7 +183,6 @@ export default class Partida extends Phaser.Scene
     }
 
     createPlayers(players, game){
-        console.log(players);
         for (var indice in players){
             if (players[indice] == null) continue;
             this.createPlayer(players[indice].playerId, players[indice], game)

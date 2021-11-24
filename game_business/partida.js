@@ -50,7 +50,11 @@ module.exports = class Partida{
             sockets[i].on('ready',  (data)=>{
                 players_ready += 1;
                 if (players_ready == PLAYER_QUANT)
-                    this.iniciarPlayers(sockets);
+                    try{
+                        this.iniciarPlayers(sockets);
+                    } catch{
+                        this.abortarPartida()
+                    }
             })
         }
         sockets.forEach(s => {
@@ -148,6 +152,16 @@ module.exports = class Partida{
             console.log('Partida '+this.status)
             this.partidaStarter();
         }
+    }
+
+    abortarPartida(){
+        this.status = 'WAITING';
+        var sockets = Array.from(this.listaDeEspera.keys());
+        sockets.forEach(s=>{
+            s.emit('playerKilled', s.id);
+        })
+        console.log('Partida '+this.status)
+        this.partidaStarter();
     }
 
     showPlayers(){
