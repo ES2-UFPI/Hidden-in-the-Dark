@@ -19,7 +19,7 @@ app.get('/test', (req, res) => {
   res.send( '<script src="/socket.io/socket.io.js"></script><script type="module" src="/test.js"></script>')
 })
 
-var partidas = [new Partida()]
+var partidas = [new Partida(io)]
 
 io.on('connection', function(socket){
 
@@ -29,7 +29,6 @@ io.on('connection', function(socket){
   });
 
   socket.on('disconnect', function(){
-    console.log('O usuario se desconectou');
     partidas[0].desconectarPlayer(socket);
     io.emit('desconectado', socket.id);
   })

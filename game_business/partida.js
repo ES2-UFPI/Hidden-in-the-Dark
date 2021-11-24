@@ -1,10 +1,11 @@
-const PLAYER_QUANT = 4
+const PLAYER_QUANT = 2
 
 module.exports = class Partida{
 
-    constructor(){
+    constructor(io){
         this.listaDeEspera = new Map();
         this.status = 'WAITING';//FIXME DEVE SER UM ENUM
+        this.io = io;
     }
 
     addListaEspera(data, socket){
@@ -12,11 +13,13 @@ module.exports = class Partida{
             name: data.name,
         }
         this.listaDeEspera.set(socket, user);
+        this.showPlayers()
         this.partidaStarter();
     }
 
     partidaStarter(){
         if (this.listaDeEspera.size<PLAYER_QUANT) return;
+        if (this.status == 'RUNNING') return;
         this.iniciarPartida();
     }
 
@@ -100,17 +103,20 @@ module.exports = class Partida{
         socket.on('playerMovement',  (movementData)=>this.playerMovement(movementData, socket));
         socket.on('chestOpen',  (id)=>this.chestOpen(id, socket));
         socket.on('killHidder',  (id)=>this.killHidder(id, socket));
+        this.showPlayers()
     }
 
     killHidder(id,socket){
-        this.desconectarPlayer(socket)
+        this.desconectarPlayer(this.getSocketById(id));
         socket.broadcast.emit('playerKilled', id);
     }
 
     desconectarPlayer(socket){
-        if (this.id_players == undefined || this.id_players.get(socket) == undefined) return;
-        this.id_players.delete(socket);
         this.listaDeEspera.delete(socket);
+        if (this.status=='RUNNING') {
+            this.id_players.delete(socket);
+        }
+        this.showPlayers()
         this.acabarPartida();
     }
 
@@ -132,11 +138,34 @@ module.exports = class Partida{
 
     acabarPartida(){//acaba a partida se obedecer as condições
         if (this.status!='RUNNING') return;
-        if (this.id_players.length <= 1 || this.keys > 8){//deve terminar partida
+        if (this.id_players.size <= 1 || this.keys > 8){//deve terminar partida
+            //verificar se existe seeker na partida
             this.status = 'WAITING';
-            partidaStarter();
+            var sockets = Array.from(this.listaDeEspera.keys());
+            sockets.forEach(s=>{
+                s.emit('playerKilled', s.id);
+            })
+            console.log('Partida '+this.status)
+            this.partidaStarter();
         }
     }
+
+    showPlayers(){
+        if (this.status == 'WAITING')
+            console.log('Jogo não iniciado | Players na fila: ' + this.listaDeEspera.size);
+        else
+            console.log('Players em jogo: '+this.id_players.size+' | Players na fila: ' + this.listaDeEspera.size);
+    }
+
+    getSocketById(id){
+        var sockets = Array.from(this.listaDeEspera.keys());
+        sockets.forEach(s=>{
+            if (s.id == id)
+                return s;
+        })
+        return null;
+    }
+
 }
 
 function shuffle(array) {
