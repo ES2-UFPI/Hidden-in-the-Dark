@@ -1,4 +1,4 @@
-const PLAYER_QUANT = 2
+const PLAYER_QUANT = 4
 
 module.exports = class Partida{
 

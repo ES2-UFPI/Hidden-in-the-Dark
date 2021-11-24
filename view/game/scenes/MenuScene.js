@@ -14,7 +14,7 @@ export class MenuScene extends Phaser.Scene {
         this.back = this.add.image(this.game.renderer.width / 2,this.game.renderer.height / 2, "background");
         this.back.setScale(1);
 
-        var player = prompt("Please enter your name", "name");
+        var player = prompt("Por favor, informe seu nome", "name");
         localStorage.setItem("playerName", player);
 
         this.name = this.add.text(this.game.renderer.width / 1.9, this.game.renderer.height / 1.5,"Bem-vindo "+ player , { fontFamily: 'OCR A Std, monospace' ,fontSize: '20px', fill: '#FFFFFF'}).setOrigin(0.5);
