@@ -10,6 +10,9 @@ export class MenuScene extends Phaser.Scene {
     preload(){
         this.load.image("background", "../assets/menu/background.jpeg");
         this.load.image("play", "../assets/menu/playButton.png");
+        this.load.audio('main-music', [
+            "../assets/sounds/Musica-menu.mp3"
+        ]);
     }
     create(){
         this.back = this.add.image(this.game.renderer.width / 2,this.game.renderer.height / 2, "background");
@@ -34,6 +37,18 @@ export class MenuScene extends Phaser.Scene {
         playButton.on("pointerup", () => {
             this.scene.start(CST.SCENES.LOAD);
         })
+
+        var background_music = this.sound.add('main-music');
+        var background_music_config={
+            mute:false,
+            loop:true, 
+            volume:0.2,
+            rate:1,
+            detune:0,
+            seek:0,
+            delay:0
+        };
+        background_music.play(background_music_config);
 
     }
 }

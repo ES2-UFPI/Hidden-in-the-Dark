@@ -71,7 +71,7 @@ export default class Chest {
             };
             chest_open.play(chest_open_config);
 
-            if(this.game.keys == 8){
+            if(this.game.keys == 1){
                 this.game.gates.forEach((g)=>{g.open()});
             }
         }

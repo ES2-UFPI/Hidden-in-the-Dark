@@ -49,7 +49,7 @@ export default class Partida extends Phaser.Scene
         this.playeralatorio.preload()
         this.playeralatorio2.preload()
 
-
+        this.load.image('safe-zone', './assets/items/safe-zone1.png');
         // baus
         this.load.image('chest-zone', './assets/items/chest-zone.png');
         this.load.image('safe-zone', './assets/items/chest-zone.png');
@@ -96,14 +96,14 @@ export default class Partida extends Phaser.Scene
         this.playeralatorio.create()
         this.playeralatorio2.create()
 
-        // this.safe_zone = [];
-        // this.safe_zone.push(this.physics.add.staticImage(1751, 151, 'safe-zone'));
-        // this.safe_zone.push(this.physics.add.staticImage(3145, 6256, 'safe-zone'));
-        // this.safe_zone.forEach((zone) =>{
-        //     zone.setVisible(false);
-        //     zone.setSize(150,130);
-        //     //zone.setDisplaySize(150,130);
-        // });
+        this.safe_zone = [];
+        this.safe_zone.push(this.physics.add.staticImage(1751, 151, 'safe-zone'));
+        this.safe_zone.push(this.physics.add.staticImage(3145, 6256, 'safe-zone'));
+        this.safe_zone.forEach((zone) =>{
+            //zone.setVisible(false);
+            zone.setSize(135,130);
+            zone.setDisplaySize(135,130);
+        });
         this.camera = this.cameras.main.setZoom(2);
 
         //define limites de alcançe da câmera
